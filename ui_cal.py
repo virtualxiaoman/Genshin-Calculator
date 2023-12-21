@@ -1,9 +1,10 @@
 import sys
 import dmg_cal
+from openpyxl import Workbook, load_workbook
 
 from PyQt5.QtGui import QFont, QDoubleValidator
 from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QStackedLayout, QLabel, \
-    QLineEdit, QFormLayout, QGroupBox, QRadioButton, QTextBrowser, QSizePolicy, QButtonGroup
+    QLineEdit, QFormLayout, QGroupBox, QRadioButton, QTextBrowser, QSizePolicy, QButtonGroup, QFileDialog
 
 
 def isFloat(s):
@@ -161,6 +162,10 @@ class Window1(QWidget):
         self.elemental_box_btn2 = QRadioButton("火水蒸发")  # 1.5
         self.elemental_box_btn3 = QRadioButton("火冰融化")  # 2
         self.elemental_box_btn4 = QRadioButton("冰火融化")  # 1.5
+        # todo 我靠忘了纯色队
+        self.elemental_box_btn1.setChecked(True)  # 设置水火蒸发默认选中并为参数设置默认值
+        self.elementalchoice_value = 1
+        self.elemental_magnification = 2
         # 连接四个按钮的信号和槽elemental_button_click
         self.elemental_box_btn1.clicked.connect(self.elemental_button_click)
         self.elemental_box_btn2.clicked.connect(self.elemental_button_click)
@@ -277,6 +282,8 @@ class Window1(QWidget):
         self.catalyzeIf_hlayout = QHBoxLayout()
         self.catalyzeIf_box_btn1 = QRadioButton("激化")
         self.catalyzeIf_box_btn2 = QRadioButton("不激化")
+        self.catalyzeIf_box_btn2.setChecked(True)  # 设置不激化默认选中
+        self.catalyzeIf_value = 0
         # 连接两个按钮的信号和槽catalyzeIf_button_click
         self.catalyzeIf_box_btn1.clicked.connect(self.catalyzeIf_button_click)
         self.catalyzeIf_box_btn2.clicked.connect(self.catalyzeIf_button_click)
@@ -289,6 +296,8 @@ class Window1(QWidget):
         self.catalyzeType_box_btn1 = QRadioButton("原激化")
         self.catalyzeType_box_btn2 = QRadioButton("超激化")
         self.catalyzeType_box_btn3 = QRadioButton("蔓激化")
+        self.catalyzeType_box_btn3.setChecked(True)  # 设置蔓激化默认选中
+        self.catalyzeType_value = 2
         # 连接三个按钮的信号和槽catalyzeType_button_click
         self.catalyzeType_box_btn1.clicked.connect(self.catalyzeType_button_click)
         self.catalyzeType_box_btn2.clicked.connect(self.catalyzeType_button_click)
@@ -314,10 +323,55 @@ class Window1(QWidget):
         """ Part Added 按钮 """
         # 第七大乘区，按钮乘区。蒸馍，你不服气
         self.button_cal_damage_data = QPushButton("计算数据")
+        self.button_cal_damage_data.setStyleSheet("QPushButton {"
+                                                  "background-color:rgba(170, 102, 128, 0.7);"  # 设置按钮
+                                                  "border: none;"  # 移除按钮的边框
+                                                  "font-weight: bold;"   # 加粗
+                                                  "color: white;"  # 文本颜色
+                                                  "padding: 6px 12px;"  # 按钮内边距
+                                                  "text-align: center;"  # 文本居中对齐
+                                                  "text-decoration: none;"  # 移除按钮文本的装饰（如下划线）
+                                                  "display: inline-block;"  # 行内块级元素
+                                                  "font-size: 16px;"  # 字体大小
+                                                  "margin: 2px 1px;"  # 外边距
+                                                  "cursor: pointer;"  # 设置鼠标悬停在按钮上时的光标样式为指针
+                                                  "border-radius: 8px;"  # 设置按钮边框的圆角半径
+                                                  "}"
+                                                  )
         self.button_cal_damage_data.clicked.connect(self.cal_damage_data)
         self.button_store_data = QPushButton("存储数据")
+        self.button_store_data.setStyleSheet("QPushButton {"
+                                             "background-color:rgba(102, 204, 255, 0.8);"  # 设置按钮颜色
+                                             "border: none;"  # 移除按钮的边框
+                                             "font-weight: bold;"   # 加粗
+                                             "color: white;"  # 文本颜色
+                                             "padding: 6px 12px;"  # 按钮内边距
+                                             "text-align: center;"  # 文本居中对齐
+                                             "text-decoration: none;"  # 移除按钮文本的装饰（如下划线）
+                                             "display: inline-block;"  # 行内块级元素
+                                             "font-size: 16px;"  # 字体大小
+                                             "margin: 2px 1px;"  # 外边距
+                                             "cursor: pointer;"  # 设置鼠标悬停在按钮上时的光标样式为指针
+                                             "border-radius: 8px;"  # 设置按钮边框的圆角半径
+                                             "}"
+                                             )
         self.button_store_data.clicked.connect(self.store_data)
         self.button_read_data = QPushButton("读取数据")
+        self.button_read_data.setStyleSheet("QPushButton {"
+                                            "background-color:rgba(57, 197, 187, 0.8);"  # 设置按钮颜色
+                                            "border: none;"  # 移除按钮的边框
+                                            "font-weight: bold;"   # 加粗
+                                            "color: white;"  # 文本颜色
+                                            "padding: 6px 12px;"  # 按钮内边距
+                                            "text-align: center;"  # 文本居中对齐
+                                            "text-decoration: none;"  # 移除按钮文本的装饰（如下划线）
+                                            "display: inline-block;"  # 行内块级元素
+                                            "font-size: 16px;"  # 字体大小
+                                            "margin: 2px 1px;"  # 外边距
+                                            "cursor: pointer;"  # 设置鼠标悬停在按钮上时的光标样式为指针
+                                            "border-radius: 8px;"  # 设置按钮边框的圆角半径
+                                            "}"
+                                            )
         self.button_read_data.clicked.connect(self.read_data)
         """设置三个数据处理的按钮格式"""
         self.layout_btn_damagedata_cal.addWidget(self.button_cal_damage_data)
@@ -327,6 +381,9 @@ class Window1(QWidget):
         """ Part Added 输出显示(数值) """
         # 第八大乘区，显示屏乘区。显示计算结果的窗口。
         self.show_text_damage = QTextBrowser()
+        self.show_text_damage.setText("点击上方的按钮能够实现：\n1.计算数据:根据界面上的数据计算\n2.存储数据:"
+                                      "存储当前界面上的数据到本地\n3.读取数据:读取本地数据并更改当前界面内的数值")
+        self.show_text_damage.setStyleSheet("color: gray;" "font-size: 17px;")  # 字体大小
         self.show_text_damage.setFixedSize(300, 150)
 
         """ 添加按钮与伤害输出窗口(文字版) B:Button T:Text """
@@ -406,43 +463,193 @@ class Window1(QWidget):
             self.resistance_value = float(self.resistance_value) / 100
             self.reduce_resistance_value = float(self.reduce_resistance_value) / 100
 
-            result = dmg_cal.damagecal_detailedly(atk=self.atk_value, talent=self.talent_value, em=self.em_value,
-                                                  catalyze_verify=self.catalyzeIf_value,
-                                                  damage_catalyze_increased=self.DCI_value,
-                                                  catalyze_type=self.catalyzeType_value,
-                                                  added_basedamage=self.added_basedamage_value,
-                                                  multiply_basedamage=self.multiply_basedamage_value,
-                                                  db_increase=self.db_value,
-                                                  cr=self.cr_value, cd=self.cd_value, cr100=0,
-                                                  elemental_magnification=self.elemental_magnification,
-                                                  increased_reaction_coefficient=self.IRC_value,
-                                                  person_lever=self.person_lever_value,
-                                                  hilichurl_level=self.hilichurl_level_value,
-                                                  reduce_defenses=self.reduce_defenses_value,
-                                                  ignore_defenses=self.ignore_defenses_value,
-                                                  increase_defenses=self.increase_defenses_value,
-                                                  reduce_resistance=self.reduce_resistance_value,
-                                                  resistance=self.resistance_value
-                                                  )
-
-            self.show_text_damage.setText(f'先试试攻击力×倍率:{result}')  # todo 未来考虑再做个append的
+            self.damage_expectation = dmg_cal.damagecal_detailedly(atk=self.atk_value, talent=self.talent_value, em=self.em_value,
+                                                                   catalyze_verify=self.catalyzeIf_value,
+                                                                   damage_catalyze_increased=self.DCI_value,
+                                                                   catalyze_type=self.catalyzeType_value,
+                                                                   added_basedamage=self.added_basedamage_value,
+                                                                   multiply_basedamage=self.multiply_basedamage_value,
+                                                                   db_increase=self.db_value,
+                                                                   cr=self.cr_value, cd=self.cd_value, cr100=0,
+                                                                   elemental_magnification=self.elemental_magnification,
+                                                                   increased_reaction_coefficient=self.IRC_value,
+                                                                   person_lever=self.person_lever_value,
+                                                                   hilichurl_level=self.hilichurl_level_value,
+                                                                   reduce_defenses=self.reduce_defenses_value,
+                                                                   ignore_defenses=self.ignore_defenses_value,
+                                                                   increase_defenses=self.increase_defenses_value,
+                                                                   reduce_resistance=self.reduce_resistance_value,
+                                                                   resistance=self.resistance_value
+                                                                   )
+            self.damage_nuclearbomb = dmg_cal.damagecal_detailedly(atk=self.atk_value, talent=self.talent_value, em=self.em_value,
+                                                                   catalyze_verify=self.catalyzeIf_value,
+                                                                   damage_catalyze_increased=self.DCI_value,
+                                                                   catalyze_type=self.catalyzeType_value,
+                                                                   added_basedamage=self.added_basedamage_value,
+                                                                   multiply_basedamage=self.multiply_basedamage_value,
+                                                                   db_increase=self.db_value,
+                                                                   cr=self.cr_value, cd=self.cd_value, cr100=1,
+                                                                   elemental_magnification=self.elemental_magnification,
+                                                                   increased_reaction_coefficient=self.IRC_value,
+                                                                   person_lever=self.person_lever_value,
+                                                                   hilichurl_level=self.hilichurl_level_value,
+                                                                   reduce_defenses=self.reduce_defenses_value,
+                                                                   ignore_defenses=self.ignore_defenses_value,
+                                                                   increase_defenses=self.increase_defenses_value,
+                                                                   reduce_resistance=self.reduce_resistance_value,
+                                                                   resistance=self.resistance_value
+                                                                   )
+            self.show_text_damage.setStyleSheet("color: rgba(238, 0, 0, 1);"
+                                                "font-size: 21px;"  # 字体大小
+                                                "font-weight: bold;")   # 加粗
+            self.show_text_damage.setText(f'期望伤害:{self.damage_expectation}')  # todo 未来考虑再做个append的窗口作为对比
+            self.show_text_damage.append(f'暴击伤害:{self.damage_nuclearbomb}')
         else:
             """说明输入有误"""
-            self.show_text_damage.setText("我靠bug")
+            self.show_text_damage.setStyleSheet("color: rgba(238, 0, 0, 1);"
+                                                "font-size: 21px;"  # 字体大小
+                                                "font-weight: bold;")   # 加粗
+            self.show_text_damage.setText("WARNING！有笨蛋输入的不是数字")
 
     def store_data(self):
         """
         todo:存储数据到本地Excel
         :return: 无返回值
         """
-        pass
+        # 弹出文件对话框，获取用户选择的文件名
+        file_name, _ = QFileDialog.getSaveFileName(self, "数据存储", "主人请修改文件名喵(ฅ≧へ≦)ฅ～.xlsx", "Excel Files (*.xlsx);;All Files (*)")
+
+        if file_name:
+            workbook = Workbook()  # 创建一个Excel工作簿
+            sheet = workbook.active  # 选择默认的工作表
+
+            # 将提示语写入第一列
+            sheet.cell(row=1, column=1, value="攻击力")
+            sheet.cell(row=2, column=1, value="天赋倍率")
+            sheet.cell(row=3, column=1, value="精通")
+            sheet.cell(row=4, column=1, value="是否激化(1激0不激)")
+            sheet.cell(row=5, column=1, value="激化反应加成值")
+            sheet.cell(row=6, column=1, value="激化反应类型")
+            sheet.cell(row=7, column=1, value="基础伤害加成(加算)")
+            sheet.cell(row=8, column=1, value="基础伤害加成(乘算)")
+            sheet.cell(row=9, column=1, value="所有的增伤的求和结果")
+            sheet.cell(row=10, column=1, value="暴击率")
+            sheet.cell(row=11, column=1, value="暴击伤害")
+            sheet.cell(row=12, column=1, value="反应基础倍率+类型")
+            sheet.cell(row=13, column=1, value="反应系数提高")
+            sheet.cell(row=14, column=1, value="角色等级")
+            sheet.cell(row=15, column=1, value="魔物等级")
+            sheet.cell(row=16, column=1, value="降低防御")
+            sheet.cell(row=17, column=1, value="无视防御")
+            sheet.cell(row=18, column=1, value="增防")
+            sheet.cell(row=19, column=1, value="降低敌人抗性")
+            sheet.cell(row=20, column=1, value="敌人抗性")
+
+            # 将数据写入Excel文件的第二列
+            sheet.cell(row=1, column=2, value=self.atk_value)
+            sheet.cell(row=2, column=2, value=self.talent_value)
+            sheet.cell(row=3, column=2, value=self.em_value)
+            sheet.cell(row=4, column=2, value=self.catalyzeIf_value)
+            sheet.cell(row=5, column=2, value=self.DCI_value)
+            sheet.cell(row=6, column=2, value=self.catalyzeType_value)
+            sheet.cell(row=7, column=2, value=self.added_basedamage_value)
+            sheet.cell(row=8, column=2, value=self.multiply_basedamage_value)
+            sheet.cell(row=9, column=2, value=self.db_value)
+            sheet.cell(row=10, column=2, value=self.cr_value)
+            sheet.cell(row=11, column=2, value=self.cd_value)
+            sheet.cell(row=12, column=2, value=self.elemental_magnification)
+            sheet.cell(row=12, column=3, value=self.elementalchoice_value)
+            sheet.cell(row=13, column=2, value=self.IRC_value)
+            sheet.cell(row=14, column=2, value=self.person_lever_value)
+            sheet.cell(row=15, column=2, value=self.hilichurl_level_value)
+            sheet.cell(row=16, column=2, value=self.reduce_defenses_value)
+            sheet.cell(row=17, column=2, value=self.ignore_defenses_value)
+            sheet.cell(row=18, column=2, value=self.increase_defenses_value)
+            sheet.cell(row=19, column=2, value=self.reduce_resistance_value)
+            sheet.cell(row=20, column=2, value=self.resistance_value)
+
+            # 写入伤害计算
+            sheet.cell(row=1, column=4, value="期望伤害")
+            sheet.cell(row=2, column=4, value="暴击伤害")
+            sheet.cell(row=1, column=5, value=self.damage_expectation)
+            sheet.cell(row=2, column=5, value=self.damage_nuclearbomb)
+            # 保存Excel文件
+            workbook.save(file_name)
+
+            # 提示保存成功
+            print(f"Data saved to {file_name}")
 
     def read_data(self):
         """
         todo:从本地Excel数据进行读入
         :return: 无返回值
         """
-        pass
+        file_name, _ = QFileDialog.getOpenFileName(self, "数据读取", "主人请选择你之前保存过的Excel文件喵(ฅ≧へ≦)ฅ～", "Excel Files (*.xlsx);;All Files (*)")
+
+        if file_name:
+            # 使用openpyxl库读取Excel文件中的数据
+            workbook = load_workbook(file_name)
+            sheet = workbook.active
+            atk_value = sheet.cell(row=1, column=2).value
+            talent_value = sheet.cell(row=2, column=2).value
+            em_value = sheet.cell(row=3, column=2).value
+            catalyzeIf_value = sheet.cell(row=4, column=2).value  # 是否激化
+            DCI_value = sheet.cell(row=5, column=2).value
+            catalyzeType_value = sheet.cell(row=6, column=2).value  # 激化类型
+            added_basedamage_value = sheet.cell(row=7, column=2).value
+            multiply_basedamage_value = sheet.cell(row=8, column=2).value
+            db_value = sheet.cell(row=9, column=2).value
+            cr_value = sheet.cell(row=10, column=2).value
+            cd_value = sheet.cell(row=11, column=2).value
+            elemental_magnification = sheet.cell(row=12, column=2).value  # 该变量无需使用
+            elementalchoice_value = sheet.cell(row=12, column=3).value  # 增幅类型
+            IRC_value = sheet.cell(row=13, column=2).value
+            person_lever_value = sheet.cell(row=14, column=2).value
+            hilichurl_level_value = sheet.cell(row=15, column=2).value
+            reduce_defenses_value = sheet.cell(row=16, column=2).value
+            ignore_defenses_value = sheet.cell(row=17, column=2).value
+            increase_defenses_value = sheet.cell(row=18, column=2).value
+            reduce_resistance_value = sheet.cell(row=19, column=2).value
+            resistance_value = sheet.cell(row=20, column=2).value
+
+            # 将数据设置到self.input_atk文本框中
+            self.input_atk.setText(str(atk_value))
+            self.input_talent.setText(str(talent_value * 100))
+            self.input_added_basedamage.setText(str(added_basedamage_value))
+            self.input_multiply_basedamage.setText(str(multiply_basedamage_value * 100))
+            self.input_DCI.setText(str(DCI_value * 100))
+            self.input_db.setText(str(db_value * 100))
+            self.input_cr.setText(str(cr_value * 100))
+            self.input_cd.setText(str(cd_value * 100))
+            self.input_em.setText(str(em_value))
+            self.input_IRC.setText(str(IRC_value * 100))
+            self.input_person_lever.setText(str(person_lever_value))
+            self.input_hilichurl_level.setText(str(hilichurl_level_value))
+            self.input_reduce_defenses.setText(str(reduce_defenses_value * 100))
+            self.input_ignore_defenses.setText(str(ignore_defenses_value * 100))
+            self.input_increase_defenses.setText(str(increase_defenses_value))
+            self.input_resistance.setText(str(resistance_value * 100))
+            self.input_reduce_resistance.setText(str(reduce_resistance_value * 100))
+
+            # 更改按钮的选择
+            if int(catalyzeIf_value) == 1:
+                self.catalyzeIf_box_btn1.setChecked(True)
+            elif int(catalyzeIf_value) == 0:
+                self.catalyzeIf_box_btn2.setChecked(True)
+            if int(catalyzeType_value) == 0:
+                self.catalyzeType_box_btn1.setChecked(True)
+            elif int(catalyzeType_value) == 1:
+                self.catalyzeType_box_btn1.setChecked(True)
+            elif int(catalyzeType_value) == 2:
+                self.catalyzeType_box_btn1.setChecked(True)
+            if int(elementalchoice_value) == 1:
+                self.elemental_box_btn1.setChecked(True)
+            elif int(elementalchoice_value) == 2:
+                self.elemental_box_btn2.setChecked(True)
+            elif int(elementalchoice_value) == 3:
+                self.elemental_box_btn3.setChecked(True)
+            elif int(elementalchoice_value) == 4:
+                self.elemental_box_btn4.setChecked(True)
 
     def elemental_button_click(self):
         """
