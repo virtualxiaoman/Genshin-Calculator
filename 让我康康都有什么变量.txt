@@ -1,0 +1,77 @@
+这里是存储一大堆变量的地方，便于检索。
+
+    AE:
+self.input_atk = QLineEdit()  # 攻击力输入框
+self.input_talent = QLineEdit()  # 天赋倍率输入框
+self.input_added_basedamage = QLineEdit()  # 基础伤害加成(加算)输入框
+self.input_multiply_basedamage = QLineEdit()  # 基础伤害加成(乘算)输入框
+    Cat_cal激化加成伤害:
+self.catalyzeIf_value=1,0代表激化/不激化
+self.catalyzeType_value=(0:Quicken原激化 1:Aggravate超激化 2:Spread蔓激化)
+
+    DB增伤:
+self.input_db = QLineEdit()  # 增伤输入框
+
+    CD暴击:
+self.input_cr = QLineEdit()  # 暴击率输入框
+self.input_cd = QLineEdit()  # 暴击伤害输入框
+
+    ER增幅:
+self.input_em = QLineEdit()  # 精通输入框
+self.elementalchoice_value=1,2,3,4代表水火2火水1.5火冰2冰火1.5
+self.input_IRC = QLineEdit()  # 反应系数提高输入框
+
+    DF防御:
+self.input_person_lever = QLineEdit()  # 角色等级输入框
+self.input_hilichurl_level = QLineEdit()  # 魔物等级输入框
+self.input_reduce_defenses = QLineEdit()  # 减防输入框
+self.input_ignore_defenses = QLineEdit()  # 穿防输入框
+self.input_increase_defenses = QLineEdit()  # 增防输入框
+
+    RT抗性:
+self.input_resistance = QLineEdit()  # 抗性输入框
+self.input_reduce_resistance = QLineEdit()  # 减抗输入框
+
+
+
+atk=self.atk_value, talent=self.talent_value, em=self.em_value,
+catalyze_verify=self.catalyzeIf_value,
+damage_catalyze_increased=self.DCI_value,
+catalyze_type=self.catalyzeType_value,
+added_basedamage=self.added_basedamage_value,
+multiply_basedamage=self.multiply_basedamage_value,
+db_increase=self.db_value,
+cr=self.cr_value, cd=self.cd_value, cr100=0,
+elemental_magnification=self.elemental_magnification,
+increased_reaction_coefficient=self.IRC_value,
+person_lever=self.person_lever_value,
+hilichurl_level=self.hilichurl_level_value,
+reduce_defenses=self.reduce_defenses_value,
+ignore_defenses=self.ignore_defenses_value,
+increase_defenses=self.increase_defenses_value,
+reduce_resistance=self.reduce_resistance_value,
+resistance=self.resistance_value
+
+
+
+self.atk_value
+self.talent_value
+self.em_value
+self.catalyzeIf_value
+self.DCI_value
+self.catalyzeType_value
+self.added_basedamage_value
+self.multiply_basedamage_value
+self.db_value
+self.cr_value
+self.cd_value
+cr100=0
+self.elemental_magnification,
+increased_reaction_coefficient=self.IRC_value,
+person_lever=self.person_lever_value,
+hilichurl_level=self.hilichurl_level_value,
+reduce_defenses=self.reduce_defenses_value,
+ignore_defenses=self.ignore_defenses_value,
+increase_defenses=self.increase_defenses_value,
+reduce_resistance=self.reduce_resistance_value,
+resistance=self.resistance_value

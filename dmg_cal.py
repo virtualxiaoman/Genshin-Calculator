@@ -20,7 +20,7 @@ def damagecal_detailedly(atk=1304.1, talent=2.8325, em=500.6, catalyze_verify=1,
     :param atk: 指单一倍率角色的倍率所属属性(如可莉是atk，芙宁娜是hp)
     :param talent: 如果是单一倍率，则按倍率算。如果是多个倍率，此处赋值1，让atk处先行计算完毕。
     :param em: 元素精通
-    :param catalyze_verify: 是否激化
+    :param catalyze_verify: 是否激化(1,0代表激化/不激化)
     :param damage_catalyze_increased: 激化反应加成值(圣遗物套装)
     :param catalyze_type: 激化反应类型(0:Quicken原激化 1:Aggravate超激化 2:Spread蔓激化)
     :param added_basedamage: 基础伤害加成(加算)，如申鹤
@@ -39,7 +39,7 @@ def damagecal_detailedly(atk=1304.1, talent=2.8325, em=500.6, catalyze_verify=1,
     :param hilichurl_level: 魔物等级(不知道怎么翻译所以用的丘丘人)
     :param reduce_defenses: 降低防御
     :param ignore_defenses: 无视防御
-    :param increase_defenses: 增防(少见，一般见于原魔塔)
+    :param increase_defenses: 增防(少见，一般见于副本中的属性强化石)
     :param reduce_resistance: 降低敌人抗性
     :param resistance: 敌人抗性(默认为10%)
     :return:从0开始的伤害计算

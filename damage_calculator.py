@@ -87,7 +87,7 @@ def DF_cal(person_lever=90, hilichurl_level=90, reduce_defenses=0, ignore_defens
     :param hilichurl_level: 魔物等级(不知道怎么翻译所以用的丘丘人)
     :param reduce_defenses: 降低防御
     :param ignore_defenses: 无视防御
-    :param increase_defenses: 增防(少见，一般见于原魔塔)
+    :param increase_defenses: 增防(少见，一般见于副本中的属性强化石)
     :return: DF_cal = (人等+100)/[(人等+100)+(1-穿防)*(1-减防+增防)*(怪等+100)],即默认为190/[190+(1-穿防)*(1-减防)*190]
     """
     DF = (person_lever + 100) / ((person_lever + 100) +
