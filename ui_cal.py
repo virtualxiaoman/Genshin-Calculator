@@ -382,9 +382,10 @@ class Window1(QWidget):
         # 第八大乘区，显示屏乘区。显示计算结果的窗口。
         self.show_text_damage = QTextBrowser()
         self.show_text_damage.setText("点击上方的按钮能够实现：\n1.计算数据:根据界面上的数据计算\n2.存储数据:"
-                                      "存储当前界面上的数据到本地\n3.读取数据:读取本地数据并更改当前界面内的数值")
-        self.show_text_damage.setStyleSheet("color: gray;" "font-size: 17px;")  # 字体大小
-        self.show_text_damage.setFixedSize(300, 150)
+                                      "存储当前界面上的数据到本地\n3.读取数据:读取本地数据并更改当前界面内的数值\n"
+                                      "！！！存储数据前请务必先计算数据一次，不然会闪退！！！")
+        self.show_text_damage.setStyleSheet("color: gray;" "font-size: 16px;")  # 字体大小
+        self.show_text_damage.setFixedSize(310, 150)
 
         """ 添加按钮与伤害输出窗口(文字版) B:Button T:Text """
         self.layout_BT_cal.addLayout(self.layout_btn_damagedata_cal)
@@ -558,7 +559,7 @@ class Window1(QWidget):
             sheet.cell(row=10, column=2, value=self.cr_value)
             sheet.cell(row=11, column=2, value=self.cd_value)
             sheet.cell(row=12, column=2, value=self.elemental_magnification)
-            sheet.cell(row=12, column=3, value=self.elementalchoice_value)
+            sheet.cell(row=12, column=3, value=self.elementalchoice_value)  # 这里记录增幅选择对象
             sheet.cell(row=13, column=2, value=self.IRC_value)
             sheet.cell(row=14, column=2, value=self.person_lever_value)
             sheet.cell(row=15, column=2, value=self.hilichurl_level_value)
@@ -575,9 +576,7 @@ class Window1(QWidget):
             sheet.cell(row=2, column=5, value=self.damage_nuclearbomb)
             # 保存Excel文件
             workbook.save(file_name)
-
-            # 提示保存成功
-            print(f"Data saved to {file_name}")
+            print(f"Data saved to {file_name}")  # 提示保存成功
 
     def read_data(self):
         """
@@ -634,22 +633,35 @@ class Window1(QWidget):
             # 更改按钮的选择
             if int(catalyzeIf_value) == 1:
                 self.catalyzeIf_box_btn1.setChecked(True)
+                self.catalyzeIf_value = 1
             elif int(catalyzeIf_value) == 0:
                 self.catalyzeIf_box_btn2.setChecked(True)
+                self.catalyzeIf_value = 0
             if int(catalyzeType_value) == 0:
                 self.catalyzeType_box_btn1.setChecked(True)
+                self.catalyzeType_value = 0
             elif int(catalyzeType_value) == 1:
                 self.catalyzeType_box_btn1.setChecked(True)
+                self.catalyzeType_value = 1
             elif int(catalyzeType_value) == 2:
                 self.catalyzeType_box_btn1.setChecked(True)
+                self.catalyzeType_value = 2
             if int(elementalchoice_value) == 1:
                 self.elemental_box_btn1.setChecked(True)
+                self.elementalchoice_value = 1
+                self.elemental_magnification = 2
             elif int(elementalchoice_value) == 2:
                 self.elemental_box_btn2.setChecked(True)
+                self.elementalchoice_value = 2
+                self.elemental_magnification = 1.5
             elif int(elementalchoice_value) == 3:
                 self.elemental_box_btn3.setChecked(True)
+                self.elementalchoice_value = 3
+                self.elemental_magnification = 1.5
             elif int(elementalchoice_value) == 4:
                 self.elemental_box_btn4.setChecked(True)
+                self.elementalchoice_value = 4
+                self.elemental_magnification = 2
 
     def elemental_button_click(self):
         """

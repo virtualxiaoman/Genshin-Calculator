@@ -8,6 +8,7 @@ self.input_multiply_basedamage = QLineEdit()  # 基础伤害加成(乘算)输入
     Cat_cal激化加成伤害:
 self.catalyzeIf_value=1,0代表激化/不激化
 self.catalyzeType_value=(0:Quicken原激化 1:Aggravate超激化 2:Spread蔓激化)
+self.input_DCI = QLineEdit()  # damage_catalyze_increased激化反应加成值输入框
 
     DB增伤:
 self.input_db = QLineEdit()  # 增伤输入框
@@ -53,25 +54,25 @@ reduce_resistance=self.reduce_resistance_value,
 resistance=self.resistance_value
 
 
-
+带％的代表UI上是×100来显示的。21个参数，11个带%(其实增防应该也算，到时候查查资料)
 self.atk_value
-self.talent_value
+self.talent_value  %
 self.em_value
 self.catalyzeIf_value
-self.DCI_value
+self.DCI_value  %
 self.catalyzeType_value
 self.added_basedamage_value
-self.multiply_basedamage_value
-self.db_value
-self.cr_value
-self.cd_value
-cr100=0
-self.elemental_magnification,
-increased_reaction_coefficient=self.IRC_value,
-person_lever=self.person_lever_value,
-hilichurl_level=self.hilichurl_level_value,
-reduce_defenses=self.reduce_defenses_value,
-ignore_defenses=self.ignore_defenses_value,
-increase_defenses=self.increase_defenses_value,
-reduce_resistance=self.reduce_resistance_value,
-resistance=self.resistance_value
+self.multiply_basedamage_value  %
+self.db_value  %
+self.cr_value  %
+self.cd_value  %
+cr100=0(此参数不显示在界面上)
+self.elemental_magnification
+self.IRC_value  %
+self.person_lever_value
+self.hilichurl_level_value
+self.reduce_defenses_value  %
+self.ignore_defenses_value  %
+self.increase_defenses_value
+self.reduce_resistance_value  %
+self.resistance_value  %
