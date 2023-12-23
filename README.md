@@ -3,6 +3,9 @@
 <br/>
 <p>还不太会用github，将就着看看吧😔</p>
 <br/>
+<h3>各个版本的更新说明请参考：</h3>
+Genshin-Calculator/原神伤害计算器.exe 的各个版本/introduction to version.md
+<br/><br/>
 <h3>参考资料：</h3>
 没有全部罗列出来，到时候慢慢补~<br />
 https://www.miyoushe.com/ys/article/29805188   《伤害乘区论》3.1 黄金的梦乡！ <br />
