@@ -4,7 +4,7 @@ from openpyxl import Workbook, load_workbook
 
 from PyQt5.QtGui import QFont, QDoubleValidator
 from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QStackedLayout, QLabel, \
-    QLineEdit, QFormLayout, QGroupBox, QRadioButton, QTextBrowser, QSizePolicy, QButtonGroup, QFileDialog
+    QLineEdit, QFormLayout, QGroupBox, QRadioButton, QTextBrowser, QSizePolicy, QButtonGroup, QFileDialog, QCheckBox
 
 
 def isFloat(s):
@@ -21,19 +21,15 @@ class Window1(QWidget):
     包括伤害乘区计算\n
     """
     def __init__(self):
+        """
+        初始化damage的UI
+        """
         super().__init__()
         self.init_damage_ui()
 
     def init_damage_ui(self):
         """
         该部分绘制伤害乘区的布局
-        输入框有：\n
-        input_atk攻击力 input_talent天赋\n
-        input_db增伤\n
-        input_cr暴击 input_cd暴伤\n
-        elemental_box反应选择 input_IRC反应系数提高\n
-        input_reduce_defenses减防 input_ignore_defenses穿防\n
-        input_reduce_resistance减抗
         """
         font_chinese_SimSun12 = QFont("SimSun", 12)
         font_chinese_SimSun16Bold = QFont("SimSun", 16)
@@ -403,7 +399,7 @@ class Window1(QWidget):
 
     def cal_damage_data(self):
         """
-        计算数据
+        计算伤害
         """
         """ 获取数据 """
         self.atk_value = self.input_atk.text()
@@ -514,8 +510,7 @@ class Window1(QWidget):
 
     def store_data(self):
         """
-        todo:存储数据到本地Excel
-        :return: 无返回值
+        存储数据到本地Excel
         """
         # 弹出文件对话框，获取用户选择的文件名
         file_name, _ = QFileDialog.getSaveFileName(self, "数据存储", "主人请修改文件名喵(ฅ≧へ≦)ฅ～.xlsx", "Excel Files (*.xlsx);;All Files (*)")
@@ -580,8 +575,7 @@ class Window1(QWidget):
 
     def read_data(self):
         """
-        todo:从本地Excel数据进行读入
-        :return: 无返回值
+        从本地Excel数据进行读入
         """
         file_name, _ = QFileDialog.getOpenFileName(self, "数据读取", "主人请选择你之前保存过的Excel文件喵(ฅ≧へ≦)ฅ～", "Excel Files (*.xlsx);;All Files (*)")
 
@@ -666,7 +660,7 @@ class Window1(QWidget):
     def elemental_button_click(self):
         """
         四种反应对应的按钮\n
-        self.elementalchoice_value=1,2,3,4代表水火2火水1.5火冰2冰火1.5
+        self.elementalchoice_value=1,2,3,4代表水火2火水1.5火冰2冰火1.5\n
         self.elemental_magnification代表加反应基础倍率的值
         """
         button = self.sender()
@@ -706,7 +700,7 @@ class Window1(QWidget):
     def catalyzeType_button_click(self):
         """
         激化类型\n
-        self.catalyzeType_value=(0:Quicken原激化 1:Aggravate超激化 2:Spread蔓激化)
+        self.catalyzeType_value = (0:Quicken原激化 1:Aggravate超激化 2:Spread蔓激化)
         """
         button = self.sender()
         choice_text = button.text()
@@ -724,9 +718,653 @@ class Window1(QWidget):
 class Window2(QWidget):
     def __init__(self):
         super().__init__()
-        QLabel("这是功能2", self)
-        self.setStyleSheet("background-color:lightgreen;")
+        self.init_abcd_ui()
 
+    def init_abcd_ui(self):
+        """
+        摆烂
+        """
+        font_chinese_SimSun16Bold = QFont("SimSun", 16)
+        font_chinese_SimSun16Bold.setBold(True)
+
+        self.Vlayout = QVBoxLayout()
+        self.title = QLabel("组队伤害，没做，催也没用，得打钱")
+        self.title.setFont(font_chinese_SimSun16Bold)
+        self.title.setStyleSheet("background-color:rgba(102, 204, 255, 0.6);")
+        self.Vlayout.addWidget(self.title)
+        self.Vlayout.addStretch(1)
+        self.setLayout(self.Vlayout)
+
+
+class Window3(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.init_artifactForecast_ui()
+
+    def init_artifactForecast_ui(self):
+        """
+        该部分绘制伤圣遗物评分与预测 artifactForecast 的布局
+        """
+        font_chinese_SimSun16Bold = QFont("SimSun", 16)
+        font_chinese_SimSun16Bold.setBold(True)
+        GroupBox_style = "font-size: 21px; font-weight: bold; color: red; font-family: KaiTi;"
+
+        """ 布局 """
+        self.layout_V_all = QVBoxLayout()  # 全局的
+        self.layout_H_artifactForecast_title = QHBoxLayout()  # 标题居中
+        self.layout_H_artifactForecast_btn = QHBoxLayout()  # 按钮居中
+        self.layout_V_artifactForecast_BtnText = QVBoxLayout()  # 按钮与输出框是竖直
+        self.layout_H_artifactForecast_input = QHBoxLayout()  # 主体的输入框水平排列
+        self.layout_V_originalArtifact_box = QVBoxLayout()  # 原圣遗物的竖直排列
+        self.layout_V_currentArtifact_box = QVBoxLayout()  # 原圣遗物的竖直排列
+        self.layout_V_ArtifactRate_box = QVBoxLayout()  # 原圣遗物的竖直排列
+        self.layout_H_ArtifactRate_box = QHBoxLayout()  # 圣遗物自定义加权水平排列
+        self.layout_H_entryData = QHBoxLayout()  # 输出词条数的文本框是水平排列
+
+        """ 标题 """
+        self.label_artifactForecast_title = QLabel("圣遗物评分与预测", self)
+        self.label_artifactForecast_title.setFont(font_chinese_SimSun16Bold)
+        self.label_artifactForecast_title.setStyleSheet("background-color:rgba(102, 204, 255, 0.6);")
+        self.layout_H_artifactForecast_title.addStretch(1)
+        self.layout_H_artifactForecast_title.addWidget(self.label_artifactForecast_title)
+        self.layout_H_artifactForecast_title.addStretch(1)
+
+        """ 原圣遗物"""
+        self.originalArtifact_box = QGroupBox()
+        self.originalArtifact_box_label = QLabel("原来的圣遗物")
+        self.originalArtifact_box_label.setStyleSheet(GroupBox_style)
+        self.layout_V_originalArtifact_box.addWidget(self.originalArtifact_box_label)
+        self.originalArtifact_box_hlayout = QHBoxLayout()
+        self.originalArtifact_box_vlayout1 = QVBoxLayout()
+        self.originalArtifact_box_vlayout2 = QVBoxLayout()
+        self.originalArtifact_box_hlayout11 = QHBoxLayout()
+        self.originalArtifact_box_hlayout12 = QHBoxLayout()
+        self.originalArtifact_box_hlayout13 = QHBoxLayout()
+        self.originalArtifact_box_hlayout14 = QHBoxLayout()
+        self.originalArtifact_box_hlayout15 = QHBoxLayout()
+        self.originalArtifact_box_hlayout21 = QHBoxLayout()
+        self.originalArtifact_box_hlayout22 = QHBoxLayout()
+        self.originalArtifact_box_hlayout23 = QHBoxLayout()
+        self.originalArtifact_box_hlayout24 = QHBoxLayout()
+        self.originalArtifact_box_hlayout25 = QHBoxLayout()
+        # 原圣遗物 左列
+        self.originalArtifact_box_btn11 = QCheckBox("暴击率")
+        self.originalArtifact_box_btn12 = QCheckBox("大生命")
+        self.originalArtifact_box_btn13 = QCheckBox("大攻击")
+        self.originalArtifact_box_btn14 = QCheckBox("大防御")
+        self.originalArtifact_box_btn15 = QCheckBox("充能")
+        self.originalArtifact_box_btn15.setFixedWidth(72)  # 72这个值是试出来的，不要改。
+        self.input_original_CritRate = QLineEdit()
+        self.input_original_BigHP = QLineEdit()
+        self.input_original_BigATK = QLineEdit()
+        self.input_original_BigDEF = QLineEdit()
+        self.input_original_Charge = QLineEdit()
+        self.input_original_CritRate.setFixedWidth(100)
+        self.input_original_BigHP.setFixedWidth(100)
+        self.input_original_BigATK.setFixedWidth(100)
+        self.input_original_BigDEF.setFixedWidth(100)
+        self.input_original_Charge.setFixedWidth(100)
+        self.original_percent11 = QLabel("%")
+        self.original_percent12 = QLabel("%")
+        self.original_percent13 = QLabel("%")
+        self.original_percent14 = QLabel("%")
+        self.original_percent15 = QLabel("%")
+        self.originalArtifact_box_hlayout11.addWidget(self.originalArtifact_box_btn11)
+        self.originalArtifact_box_hlayout11.addWidget(self.input_original_CritRate)
+        self.originalArtifact_box_hlayout11.addWidget(self.original_percent11)
+        self.originalArtifact_box_hlayout12.addWidget(self.originalArtifact_box_btn12)
+        self.originalArtifact_box_hlayout12.addWidget(self.input_original_BigHP)
+        self.originalArtifact_box_hlayout12.addWidget(self.original_percent12)
+        self.originalArtifact_box_hlayout13.addWidget(self.originalArtifact_box_btn13)
+        self.originalArtifact_box_hlayout13.addWidget(self.input_original_BigATK)
+        self.originalArtifact_box_hlayout13.addWidget(self.original_percent13)
+        self.originalArtifact_box_hlayout14.addWidget(self.originalArtifact_box_btn14)
+        self.originalArtifact_box_hlayout14.addWidget(self.input_original_BigDEF)
+        self.originalArtifact_box_hlayout14.addWidget(self.original_percent14)
+        self.originalArtifact_box_hlayout15.addWidget(self.originalArtifact_box_btn15)
+        self.originalArtifact_box_hlayout15.addWidget(self.input_original_Charge)
+        self.originalArtifact_box_hlayout15.addWidget(self.original_percent15)
+        self.originalArtifact_box_vlayout1.addLayout(self.originalArtifact_box_hlayout11)
+        self.originalArtifact_box_vlayout1.addLayout(self.originalArtifact_box_hlayout12)
+        self.originalArtifact_box_vlayout1.addLayout(self.originalArtifact_box_hlayout13)
+        self.originalArtifact_box_vlayout1.addLayout(self.originalArtifact_box_hlayout14)
+        self.originalArtifact_box_vlayout1.addLayout(self.originalArtifact_box_hlayout15)
+        # 原圣遗物 右列
+        self.originalArtifact_box_btn21 = QCheckBox("暴伤")
+        self.originalArtifact_box_btn22 = QCheckBox("小生命")
+        self.originalArtifact_box_btn23 = QCheckBox("小攻击")
+        self.originalArtifact_box_btn24 = QCheckBox("小防御")
+        self.originalArtifact_box_btn25 = QCheckBox("精通")
+        self.originalArtifact_box_btn21.setFixedWidth(72)
+        self.input_original_CritDMG = QLineEdit()
+        self.input_original_SmallHP = QLineEdit()
+        self.input_original_SmallATK = QLineEdit()
+        self.input_original_SmallDEF = QLineEdit()
+        self.input_original_EM = QLineEdit()
+        self.input_original_CritDMG.setFixedWidth(100)
+        self.input_original_SmallHP.setFixedWidth(120)
+        self.input_original_SmallATK.setFixedWidth(120)
+        self.input_original_SmallDEF.setFixedWidth(120)
+        self.input_original_EM.setFixedWidth(120)
+        self.original_percent21 = QLabel("%")
+        self.originalArtifact_box_hlayout21.addWidget(self.originalArtifact_box_btn21)
+        self.originalArtifact_box_hlayout21.addWidget(self.input_original_CritDMG)
+        self.originalArtifact_box_hlayout21.addWidget(self.original_percent21)
+        self.originalArtifact_box_hlayout22.addWidget(self.originalArtifact_box_btn22)
+        self.originalArtifact_box_hlayout22.addWidget(self.input_original_SmallHP)
+        self.originalArtifact_box_hlayout23.addWidget(self.originalArtifact_box_btn23)
+        self.originalArtifact_box_hlayout23.addWidget(self.input_original_SmallATK)
+        self.originalArtifact_box_hlayout24.addWidget(self.originalArtifact_box_btn24)
+        self.originalArtifact_box_hlayout24.addWidget(self.input_original_SmallDEF)
+        self.originalArtifact_box_hlayout25.addWidget(self.originalArtifact_box_btn25)
+        self.originalArtifact_box_hlayout25.addWidget(self.input_original_EM)
+        self.originalArtifact_box_vlayout2.addLayout(self.originalArtifact_box_hlayout21)
+        self.originalArtifact_box_vlayout2.addLayout(self.originalArtifact_box_hlayout22)
+        self.originalArtifact_box_vlayout2.addLayout(self.originalArtifact_box_hlayout23)
+        self.originalArtifact_box_vlayout2.addLayout(self.originalArtifact_box_hlayout24)
+        self.originalArtifact_box_vlayout2.addLayout(self.originalArtifact_box_hlayout25)
+        # 原圣遗物的布局
+        self.originalArtifact_box_hlayout.addLayout(self.originalArtifact_box_vlayout1)
+        self.originalArtifact_box_hlayout.addLayout(self.originalArtifact_box_vlayout2)
+        self.layout_V_originalArtifact_box.addLayout(self.originalArtifact_box_hlayout)
+        self.originalArtifact_box.setLayout(self.layout_V_originalArtifact_box)
+
+        """ 现圣遗物"""
+        self.currentArtifact_box = QGroupBox()
+        self.currentArtifact_box_label = QLabel("现在的圣遗物")
+        self.currentArtifact_box_label.setStyleSheet(GroupBox_style)
+        self.layout_V_currentArtifact_box.addWidget(self.currentArtifact_box_label)
+        self.currentArtifact_box_hlayout = QHBoxLayout()
+        self.currentArtifact_box_vlayout1 = QVBoxLayout()
+        self.currentArtifact_box_vlayout2 = QVBoxLayout()
+        self.currentArtifact_box_hlayout11 = QHBoxLayout()
+        self.currentArtifact_box_hlayout12 = QHBoxLayout()
+        self.currentArtifact_box_hlayout13 = QHBoxLayout()
+        self.currentArtifact_box_hlayout14 = QHBoxLayout()
+        self.currentArtifact_box_hlayout15 = QHBoxLayout()
+        self.currentArtifact_box_hlayout21 = QHBoxLayout()
+        self.currentArtifact_box_hlayout22 = QHBoxLayout()
+        self.currentArtifact_box_hlayout23 = QHBoxLayout()
+        self.currentArtifact_box_hlayout24 = QHBoxLayout()
+        self.currentArtifact_box_hlayout25 = QHBoxLayout()
+        # 现圣遗物 左侧
+        self.currentArtifact_box_btn11 = QCheckBox("暴击率")
+        self.currentArtifact_box_btn12 = QCheckBox("大生命")
+        self.currentArtifact_box_btn13 = QCheckBox("大攻击")
+        self.currentArtifact_box_btn14 = QCheckBox("大防御")
+        self.currentArtifact_box_btn15 = QCheckBox("充能")
+        self.currentArtifact_box_btn15.setFixedWidth(72)  # 72这个值是试出来的，不要改。但是还是对齐不了
+        self.input_current_CritRate = QLineEdit()
+        self.input_current_BigHP = QLineEdit()
+        self.input_current_BigATK = QLineEdit()
+        self.input_current_BigDEF = QLineEdit()
+        self.input_current_Charge = QLineEdit()
+        self.input_current_CritRate.setFixedWidth(100)
+        self.input_current_BigHP.setFixedWidth(100)
+        self.input_current_BigATK.setFixedWidth(100)
+        self.input_current_BigDEF.setFixedWidth(100)
+        self.input_current_Charge.setFixedWidth(100)
+        self.current_percent11 = QLabel("%")
+        self.current_percent12 = QLabel("%")
+        self.current_percent13 = QLabel("%")
+        self.current_percent14 = QLabel("%")
+        self.current_percent15 = QLabel("%")
+        self.currentArtifact_box_hlayout11.addWidget(self.currentArtifact_box_btn11)
+        self.currentArtifact_box_hlayout11.addWidget(self.input_current_CritRate)
+        self.currentArtifact_box_hlayout11.addWidget(self.current_percent11)
+        self.currentArtifact_box_hlayout12.addWidget(self.currentArtifact_box_btn12)
+        self.currentArtifact_box_hlayout12.addWidget(self.input_current_BigHP)
+        self.currentArtifact_box_hlayout12.addWidget(self.current_percent12)
+        self.currentArtifact_box_hlayout13.addWidget(self.currentArtifact_box_btn13)
+        self.currentArtifact_box_hlayout13.addWidget(self.input_current_BigATK)
+        self.currentArtifact_box_hlayout13.addWidget(self.current_percent13)
+        self.currentArtifact_box_hlayout14.addWidget(self.currentArtifact_box_btn14)
+        self.currentArtifact_box_hlayout14.addWidget(self.input_current_BigDEF)
+        self.currentArtifact_box_hlayout14.addWidget(self.current_percent14)
+        self.currentArtifact_box_hlayout15.addWidget(self.currentArtifact_box_btn15)
+        self.currentArtifact_box_hlayout15.addWidget(self.input_current_Charge)
+        self.currentArtifact_box_hlayout15.addWidget(self.current_percent15)
+        self.currentArtifact_box_vlayout1.addLayout(self.currentArtifact_box_hlayout11)
+        self.currentArtifact_box_vlayout1.addLayout(self.currentArtifact_box_hlayout12)
+        self.currentArtifact_box_vlayout1.addLayout(self.currentArtifact_box_hlayout13)
+        self.currentArtifact_box_vlayout1.addLayout(self.currentArtifact_box_hlayout14)
+        self.currentArtifact_box_vlayout1.addLayout(self.currentArtifact_box_hlayout15)
+        # 现圣遗物 右侧
+        self.currentArtifact_box_btn21 = QCheckBox("暴伤")
+        self.currentArtifact_box_btn22 = QCheckBox("小生命")
+        self.currentArtifact_box_btn23 = QCheckBox("小攻击")
+        self.currentArtifact_box_btn24 = QCheckBox("小防御")
+        self.currentArtifact_box_btn25 = QCheckBox("精通")
+        self.currentArtifact_box_btn21.setFixedWidth(72)
+        self.input_current_CritDMG = QLineEdit()
+        self.input_current_SmallHP = QLineEdit()
+        self.input_current_SmallATK = QLineEdit()
+        self.input_current_SmallDEF = QLineEdit()
+        self.input_current_EM = QLineEdit()
+        self.input_current_CritDMG.setFixedWidth(100)
+        self.input_current_SmallHP.setFixedWidth(120)
+        self.input_current_SmallATK.setFixedWidth(120)
+        self.input_current_SmallDEF.setFixedWidth(120)
+        self.input_current_EM.setFixedWidth(120)
+        self.current_percent21 = QLabel("%")
+        self.currentArtifact_box_hlayout21.addWidget(self.currentArtifact_box_btn21)
+        self.currentArtifact_box_hlayout21.addWidget(self.input_current_CritDMG)
+        self.currentArtifact_box_hlayout21.addWidget(self.current_percent21)
+        self.currentArtifact_box_hlayout22.addWidget(self.currentArtifact_box_btn22)
+        self.currentArtifact_box_hlayout22.addWidget(self.input_current_SmallHP)
+        self.currentArtifact_box_hlayout23.addWidget(self.currentArtifact_box_btn23)
+        self.currentArtifact_box_hlayout23.addWidget(self.input_current_SmallATK)
+        self.currentArtifact_box_hlayout24.addWidget(self.currentArtifact_box_btn24)
+        self.currentArtifact_box_hlayout24.addWidget(self.input_current_SmallDEF)
+        self.currentArtifact_box_hlayout25.addWidget(self.currentArtifact_box_btn25)
+        self.currentArtifact_box_hlayout25.addWidget(self.input_current_EM)
+        self.currentArtifact_box_vlayout2.addLayout(self.currentArtifact_box_hlayout21)
+        self.currentArtifact_box_vlayout2.addLayout(self.currentArtifact_box_hlayout22)
+        self.currentArtifact_box_vlayout2.addLayout(self.currentArtifact_box_hlayout23)
+        self.currentArtifact_box_vlayout2.addLayout(self.currentArtifact_box_hlayout24)
+        self.currentArtifact_box_vlayout2.addLayout(self.currentArtifact_box_hlayout25)
+        # 现圣遗物的布局
+        self.currentArtifact_box_hlayout.addLayout(self.currentArtifact_box_vlayout1)
+        self.currentArtifact_box_hlayout.addLayout(self.currentArtifact_box_vlayout2)
+        self.layout_V_currentArtifact_box.addLayout(self.currentArtifact_box_hlayout)
+        self.currentArtifact_box.setLayout(self.layout_V_currentArtifact_box)
+
+        """圣遗物自定义加权"""
+        self.ArtifactRate_box = QGroupBox()
+        self.ArtifactRate_box_label = QLabel("对圣遗物的自定义加权分数")
+        self.ArtifactRate_box_label.setStyleSheet(GroupBox_style)
+        self.layout_V_ArtifactRate_box.addWidget(self.ArtifactRate_box_label)
+        self.ArtifactRate_formlayout1 = QFormLayout()  # 表单容器
+        self.ArtifactRate_formlayout2 = QFormLayout()  # 表单容器
+        self.inputRate_CritRate = QLineEdit()
+        self.inputRate_BigHP = QLineEdit()
+        self.inputRate_BigATK = QLineEdit()
+        self.inputRate_BigDEF = QLineEdit()
+        self.inputRate_Charge = QLineEdit()
+        self.inputRate_CritDMG = QLineEdit()
+        self.inputRate_SmallHP = QLineEdit()
+        self.inputRate_SmallATK = QLineEdit()
+        self.inputRate_SmallDEF = QLineEdit()
+        self.inputRate_CritRate = QLineEdit()
+        self.inputRate_EM = QLineEdit()
+        self.inputRate_CritRate.setFixedWidth(50)
+        self.inputRate_BigHP.setFixedWidth(50)
+        self.inputRate_BigATK.setFixedWidth(50)
+        self.inputRate_BigDEF.setFixedWidth(50)
+        self.inputRate_Charge.setFixedWidth(50)
+        self.inputRate_CritDMG.setFixedWidth(50)
+        self.inputRate_SmallHP.setFixedWidth(50)
+        self.inputRate_SmallATK.setFixedWidth(50)
+        self.inputRate_SmallDEF.setFixedWidth(50)
+        self.inputRate_EM.setFixedWidth(50)
+        self.inputRate_CritRate.setText("100")
+        self.inputRate_BigHP.setText("80")
+        self.inputRate_BigATK.setText("80")
+        self.inputRate_BigDEF.setText("80")
+        self.inputRate_Charge.setText("75")
+        self.inputRate_CritDMG.setText("100")
+        self.inputRate_SmallHP.setText("50")
+        self.inputRate_SmallATK.setText("50")
+        self.inputRate_SmallDEF.setText("50")
+        self.inputRate_EM.setText("75")
+        self.ArtifactRate_formlayout1.addRow("暴击:", self.inputRate_CritRate)
+        self.ArtifactRate_formlayout1.addRow("大生命:", self.inputRate_BigHP)
+        self.ArtifactRate_formlayout1.addRow("大攻击:", self.inputRate_BigATK)
+        self.ArtifactRate_formlayout1.addRow("大防御:", self.inputRate_BigDEF)
+        self.ArtifactRate_formlayout1.addRow("充能:", self.inputRate_Charge)
+        self.ArtifactRate_formlayout2.addRow("暴伤:", self.inputRate_CritDMG)
+        self.ArtifactRate_formlayout2.addRow("小生命:", self.inputRate_SmallHP)
+        self.ArtifactRate_formlayout2.addRow("小攻击:", self.inputRate_SmallATK)
+        self.ArtifactRate_formlayout2.addRow("小防御:", self.inputRate_SmallDEF)
+        self.ArtifactRate_formlayout2.addRow("精通:", self.inputRate_EM)
+
+        self.layout_H_ArtifactRate_box.addLayout(self.ArtifactRate_formlayout1)
+        self.layout_H_ArtifactRate_box.addLayout(self.ArtifactRate_formlayout2)
+        self.layout_V_ArtifactRate_box.addLayout(self.layout_H_ArtifactRate_box)
+        self.ArtifactRate_box.setLayout(self.layout_V_ArtifactRate_box)
+
+        """赌不赌要得先看词条数啊"""
+        # 原圣遗物现在是+几了？
+        self.CurrentLevel1_box = QGroupBox("当前等级")
+        self.CurrentLevel1_vlayout = QVBoxLayout()
+        self.CurrentLevel1_btn0 = QRadioButton("+0")
+        self.CurrentLevel1_btn4 = QRadioButton("+4")
+        self.CurrentLevel1_btn8 = QRadioButton("+8")
+        self.CurrentLevel1_btn12 = QRadioButton("+12")
+        self.CurrentLevel1_btn16 = QRadioButton("+16")
+        self.CurrentLevel1_btn20 = QRadioButton("+20")
+        self.CurrentLevel1_btn20.setChecked(True)  # 默认20级
+        self.CurrentLevel1_value = 20
+        self.CurrentLevel1_vlayout.addWidget(self.CurrentLevel1_btn0)
+        self.CurrentLevel1_vlayout.addWidget(self.CurrentLevel1_btn4)
+        self.CurrentLevel1_vlayout.addWidget(self.CurrentLevel1_btn8)
+        self.CurrentLevel1_vlayout.addWidget(self.CurrentLevel1_btn12)
+        self.CurrentLevel1_vlayout.addWidget(self.CurrentLevel1_btn16)
+        self.CurrentLevel1_vlayout.addWidget(self.CurrentLevel1_btn20)
+        self.CurrentLevel1_box.setLayout(self.CurrentLevel1_vlayout)
+        self.CurrentLevel1_btn0.clicked.connect(self.CurrentLevel1_button_click)
+        self.CurrentLevel1_btn4.clicked.connect(self.CurrentLevel1_button_click)
+        self.CurrentLevel1_btn8.clicked.connect(self.CurrentLevel1_button_click)
+        self.CurrentLevel1_btn12.clicked.connect(self.CurrentLevel1_button_click)
+        self.CurrentLevel1_btn16.clicked.connect(self.CurrentLevel1_button_click)
+        self.CurrentLevel1_btn20.clicked.connect(self.CurrentLevel1_button_click)
+        # 新圣遗物现在是+几了？
+        self.CurrentLevel2_box = QGroupBox("当前等级")
+        self.CurrentLevel2_vlayout = QVBoxLayout()
+        self.CurrentLevel2_btn0 = QRadioButton("+0")
+        self.CurrentLevel2_btn4 = QRadioButton("+4")
+        self.CurrentLevel2_btn8 = QRadioButton("+8")
+        self.CurrentLevel2_btn12 = QRadioButton("+12")
+        self.CurrentLevel2_btn16 = QRadioButton("+16")
+        self.CurrentLevel2_btn20 = QRadioButton("+20")
+        self.CurrentLevel2_btn0.setChecked(True)  # 设置不激化默认选中
+        self.CurrentLevel2_value = 0
+        self.CurrentLevel2_vlayout.addWidget(self.CurrentLevel2_btn0)
+        self.CurrentLevel2_vlayout.addWidget(self.CurrentLevel2_btn4)
+        self.CurrentLevel2_vlayout.addWidget(self.CurrentLevel2_btn8)
+        self.CurrentLevel2_vlayout.addWidget(self.CurrentLevel2_btn12)
+        self.CurrentLevel2_vlayout.addWidget(self.CurrentLevel2_btn16)
+        self.CurrentLevel2_vlayout.addWidget(self.CurrentLevel2_btn20)
+        self.CurrentLevel2_box.setLayout(self.CurrentLevel2_vlayout)
+        self.CurrentLevel2_btn0.clicked.connect(self.CurrentLevel2_button_click)
+        self.CurrentLevel2_btn4.clicked.connect(self.CurrentLevel2_button_click)
+        self.CurrentLevel2_btn8.clicked.connect(self.CurrentLevel2_button_click)
+        self.CurrentLevel2_btn12.clicked.connect(self.CurrentLevel2_button_click)
+        self.CurrentLevel2_btn16.clicked.connect(self.CurrentLevel2_button_click)
+        self.CurrentLevel2_btn20.clicked.connect(self.CurrentLevel2_button_click)
+
+        # 创建按钮
+        self.cal_data_button = QPushButton("计算数据")
+        self.cal_data_button.setStyleSheet("QPushButton {"
+                                           "background-color:rgba(102, 204, 255, 0.8);"  # 设置按钮
+                                           "border: none;"  # 移除按钮的边框
+                                           "font-weight: bold;"   # 加粗
+                                           "color: white;"  # 文本颜色
+                                           "padding: 6px 12px;"  # 按钮内边距
+                                           "text-align: center;"  # 文本居中对齐
+                                           "text-decoration: none;"  # 移除按钮文本的装饰（如下划线）
+                                           "display: inline-block;"  # 行内块级元素
+                                           "font-size: 21px;"  # 字体大小
+                                           "margin: 0px 0px;"  # 外边距
+                                           "cursor: pointer;"  # 设置鼠标悬停在按钮上时的光标样式为指针
+                                           "border-radius: 8px;"  # 设置按钮边框的圆角半径
+                                           "}"
+                                           )
+        self.cal_data_button.clicked.connect(self.cal_artifactData)
+        # 创建赌不赌的输出框
+        self.grindArtifact_text = QTextBrowser()
+        self.grindArtifact_text.setText("这里会提供一些建议，关于你是否应该赌圣遗物。仅供参考，不代表真实事件😋")
+        self.grindArtifact_text.setStyleSheet("color: gray;" "font-size: 21px;")  # 字体大小
+        self.grindArtifact_text.setFixedSize(280, 130)
+        # 词条计算的布局
+        self.originalEntryData_text = QTextBrowser()
+        self.originalEntryData_text.setText("点击“计算数据”后，这里会显示你的圣遗物词条数")
+        self.originalEntryData_text.setStyleSheet("color: gray;" "font-size: 16px;")  # 字体大小
+        self.originalEntryData_text.setFixedSize(280, 180)
+        self.currentEntryData_text = QTextBrowser()
+        self.currentEntryData_text.setText("点击“计算数据”后，这里会显示你的圣遗物词条数")
+        self.currentEntryData_text.setStyleSheet("color: gray;" "font-size: 16px;")  # 字体大小
+        self.currentEntryData_text.setFixedSize(280, 180)
+        self.layout_H_artifactForecast_btn.addStretch(1)
+        self.layout_H_artifactForecast_btn.addWidget(self.cal_data_button)
+        self.layout_H_artifactForecast_btn.addStretch(1)
+        self.layout_V_artifactForecast_BtnText.addLayout(self.layout_H_artifactForecast_btn)
+        self.layout_V_artifactForecast_BtnText.addWidget(self.grindArtifact_text)
+
+        """ 整体布局 """
+        # 词条读入的布局
+        self.layout_V_all.addLayout(self.layout_H_artifactForecast_title)
+
+        self.layout_H_artifactForecast_input.addWidget(self.originalArtifact_box)
+        self.layout_H_artifactForecast_input.addStretch(1)
+        self.layout_H_artifactForecast_input.addWidget(self.currentArtifact_box)
+        self.layout_H_artifactForecast_input.addStretch(1)
+        self.layout_H_artifactForecast_input.addWidget(self.ArtifactRate_box)
+        self.layout_H_artifactForecast_input.addStretch(1)
+        # 词条计算的布局
+        self.layout_H_entryData.addWidget(self.CurrentLevel1_box)
+        self.layout_H_entryData.addWidget(self.originalEntryData_text)
+        self.layout_H_entryData.addStretch(3)
+        self.layout_H_entryData.addWidget(self.CurrentLevel2_box)
+        self.layout_H_entryData.addWidget(self.currentEntryData_text)
+        self.layout_H_entryData.addStretch(3)
+        self.layout_H_entryData.addLayout(self.layout_V_artifactForecast_BtnText)
+        self.layout_H_entryData.addStretch(2)
+        # 整体的垂直布局
+        self.layout_V_all.addLayout(self.layout_H_artifactForecast_input)
+        self.layout_V_all.addLayout(self.layout_H_entryData)
+
+        # 整体布局
+        self.layout_V_all.addStretch(1)
+        self.setLayout(self.layout_V_all)
+
+    def cal_artifactData(self):
+        """
+        用于读取数据并调用计算圣遗物数据\n
+        函数功能：读取UI中新旧圣遗物的数据。仅读取，不计算。计算调用cal_entryData计算词条数，cal_grindProbability计算赌赢的概率\n
+        关联按钮：cal_data_button
+        """
+        """初始化"""
+        self.originalEntryData_text.setStyleSheet("color: black;" "font-size: 18px;")  # 字体大小
+        self.currentEntryData_text.setStyleSheet("color: black;" "font-size: 18px;")  # 字体大小
+        self.original_CritRate_value = self.original_BigHP_value = self.original_BigATK_value = \
+            self.original_BigDEF_value = self.original_Charge_value = self.original_CritDMG_value = \
+            self.original_SmallHP_value = self.original_SmallATK_value = self.original_SmallDEF_value = \
+            self.original_EM_value = 0
+        self.current_CritRate_value = self.current_BigHP_value = self.current_BigATK_value = \
+            self.current_BigDEF_value = self.current_Charge_value = self.current_CritDMG_value = \
+            self.current_SmallHP_value = self.current_SmallATK_value = self.current_SmallDEF_value = \
+            self.current_EM_value = 0
+
+        """计算选中的框对应的属性"""
+        if self.originalArtifact_box_btn11.isChecked():
+            self.original_CritRate_value = float(self.input_original_CritRate.text())
+        if self.originalArtifact_box_btn12.isChecked():
+            self.original_BigHP_value = float(self.input_original_BigHP.text())
+        if self.originalArtifact_box_btn13.isChecked():
+            self.original_BigATK_value = float(self.input_original_BigATK.text())
+        if self.originalArtifact_box_btn14.isChecked():
+            self.original_BigDEF_value = float(self.input_original_BigDEF.text())
+        if self.originalArtifact_box_btn15.isChecked():
+            self.original_Charge_value = float(self.input_original_Charge.text())
+        if self.originalArtifact_box_btn21.isChecked():
+            self.original_CritDMG_value = float(self.input_original_CritDMG.text())
+        if self.originalArtifact_box_btn22.isChecked():
+            self.original_SmallHP_value = float(self.input_original_SmallHP.text())
+        if self.originalArtifact_box_btn23.isChecked():
+            self.original_SmallATK_value = float(self.input_original_SmallATK.text())
+        if self.originalArtifact_box_btn24.isChecked():
+            self.original_SmallDEF_value = float(self.input_original_SmallDEF.text())
+        if self.originalArtifact_box_btn25.isChecked():
+            self.original_EM_value = float(self.input_original_EM.text())
+
+        if self.currentArtifact_box_btn11.isChecked():
+            self.current_CritRate_value = float(self.input_current_CritRate.text())
+        if self.currentArtifact_box_btn12.isChecked():
+            self.current_BigHP_value = float(self.input_current_BigHP.text())
+        if self.currentArtifact_box_btn13.isChecked():
+            self.current_BigATK_value = float(self.input_current_BigATK.text())
+        if self.currentArtifact_box_btn14.isChecked():
+            self.current_BigDEF_value = float(self.input_current_BigDEF.text())
+        if self.currentArtifact_box_btn15.isChecked():
+            self.current_Charge_value = float(self.input_current_Charge.text())
+        if self.currentArtifact_box_btn21.isChecked():
+            self.current_CritDMG_value = float(self.input_current_CritDMG.text())
+        if self.currentArtifact_box_btn22.isChecked():
+            self.current_SmallHP_value = float(self.input_current_SmallHP.text())
+        if self.currentArtifact_box_btn23.isChecked():
+            self.current_SmallATK_value = float(self.input_current_SmallATK.text())
+        if self.currentArtifact_box_btn24.isChecked():
+            self.current_SmallDEF_value = float(self.input_current_SmallDEF.text())
+        if self.currentArtifact_box_btn25.isChecked():
+            self.current_EM_value = float(self.input_current_EM.text())
+
+        """权值"""
+        self.Rate_CritRate_value = float(self.inputRate_CritRate.text()) / 100
+        self.Rate_BigHP_value = float(self.inputRate_BigHP.text()) / 100
+        self.Rate_BigATK_value = float(self.inputRate_BigATK.text()) / 100
+        self.Rate_BigDEF_value = float(self.inputRate_BigDEF.text()) / 100
+        self.Rate_Charge_value = float(self.inputRate_Charge.text()) / 100
+        self.Rate_CritDMG_value = float(self.inputRate_CritDMG.text()) / 100
+        self.Rate_SmallHP_value = float(self.inputRate_SmallHP.text()) / 100
+        self.Rate_SmallATK_value = float(self.inputRate_SmallATK.text()) / 100
+        self.Rate_SmallDEF_value = float(self.inputRate_SmallDEF.text()) / 100
+        self.Rate_EM_value = float(self.inputRate_EM.text()) / 100
+
+        """调用词条计算,赌圣遗物"""
+        self.cal_entryData()
+        self.cal_grindProbability()
+
+    def cal_entryData(self):
+        """
+        [子函数]
+          函数功能：计算词条数\n
+          关联函数：cal_data_button
+          参考资料：
+               hp    HP      atk     ATK     def     DEF    Charge    EM     CR      CD
+        1档 209.13  4.08%   13.62   4.08%   16.20   5.10%   4.53%   16.32   2.72%   5.44%
+        2档 239.00  4.66%   15.56   4.66%   18.52   5.83%   5.18%   18.65   3.11%   6.22%
+        3档 268.88  5.25%   17.51   5.25%   20.83   6.56%   5.83%   20.98   3.50%   6.99%
+        4档 298.75  5.83%   19.45   5.83%   23.15   7.29%   6.48%   23.31   3.89%   7.77%
+        AVG 253.94  4.95%   16.54   4.95%   19.68   6.19%   5.51%   19.81   3.30%   6.60%
+        """
+        self.original_entryData = self.original_SmallHP_value / 253.94 + self.original_BigHP_value / 4.95 + \
+                                  self.original_SmallATK_value / 16.54 + self.original_BigATK_value / 4.95 + \
+                                  self.original_SmallDEF_value / 19.68 + self.original_BigDEF_value / 6.19 + \
+                                  self.original_Charge_value / 5.51 + self.original_EM_value / 19.81 + \
+                                  self.original_CritRate_value / 3.30 + self.original_CritDMG_value / 6.60
+        self.originalEntryData_text.setText("词条数为："+"{:.4f}".format(self.original_entryData))
+        if self.originalArtifact_box_btn11.isChecked():
+            self.originalEntryData_text.append("暴击词条数:"+"{:.3f}".format(self.original_CritRate_value / 3.30))
+        if self.originalArtifact_box_btn12.isChecked():
+            self.originalEntryData_text.append("大生命词条数:"+"{:.3f}".format(self.original_BigHP_value / 4.95))
+        if self.originalArtifact_box_btn13.isChecked():
+            self.originalEntryData_text.append("大攻击词条数:"+"{:.3f}".format(self.original_BigATK_value / 4.95))
+        if self.originalArtifact_box_btn14.isChecked():
+            self.originalEntryData_text.append("大防御词条数:"+"{:.3f}".format(self.original_BigDEF_value / 6.19))
+        if self.originalArtifact_box_btn15.isChecked():
+            self.originalEntryData_text.append("充能词条数:"+"{:.3f}".format(self.original_Charge_value / 5.51))
+        if self.originalArtifact_box_btn21.isChecked():
+            self.originalEntryData_text.append("暴击伤害词条数:"+"{:.3f}".format(self.original_CritDMG_value / 6.60))
+        if self.originalArtifact_box_btn22.isChecked():
+            self.originalEntryData_text.append("小生命词条数:"+"{:.3f}".format(self.original_SmallHP_value / 253.94))
+        if self.originalArtifact_box_btn23.isChecked():
+            self.originalEntryData_text.append("小攻击词条数:"+"{:.3f}".format(self.original_SmallATK_value / 16.54))
+        if self.originalArtifact_box_btn24.isChecked():
+            self.originalEntryData_text.append("小防御词条数:"+"{:.3f}".format(self.original_SmallDEF_value / 19.68))
+        if self.originalArtifact_box_btn25.isChecked():
+            self.originalEntryData_text.append("精通词条数:"+"{:.3f}".format(self.original_EM_value / 19.81))
+
+        self.Rate_original_entryData = self.original_SmallHP_value / 253.94 * self.Rate_SmallHP_value + \
+                                       self.original_BigHP_value / 4.95 * self.Rate_BigHP_value + \
+                                       self.original_SmallATK_value / 16.54 * self.Rate_SmallATK_value + \
+                                       self.original_BigATK_value / 4.95 * self.Rate_BigATK_value + \
+                                       self.original_SmallDEF_value / 19.68 * self.Rate_SmallDEF_value + \
+                                       self.original_BigDEF_value / 6.19 * self.Rate_BigDEF_value + \
+                                       self.original_Charge_value / 5.51 * self.Rate_Charge_value + \
+                                       self.original_EM_value / 19.81 * self.Rate_EM_value + \
+                                       self.original_CritRate_value / 3.30 * self.Rate_CritRate_value + \
+                                       self.original_CritDMG_value / 6.60 * self.Rate_CritDMG_value
+        self.originalEntryData_text.append("\n加权后的词条数为："+"{:.4f}".format(self.Rate_original_entryData))
+        if self.originalArtifact_box_btn11.isChecked():
+            self.originalEntryData_text.append("暴击词条数:"+"{:.3f}".format(self.original_CritRate_value / 3.30 * self.Rate_CritRate_value))
+        if self.originalArtifact_box_btn12.isChecked():
+            self.originalEntryData_text.append("大生命词条数:"+"{:.3f}".format(self.original_BigHP_value / 4.95 * self.Rate_BigHP_value))
+        if self.originalArtifact_box_btn13.isChecked():
+            self.originalEntryData_text.append("大攻击词条数:"+"{:.3f}".format(self.original_BigATK_value / 4.95 * self.Rate_BigATK_value))
+        if self.originalArtifact_box_btn14.isChecked():
+            self.originalEntryData_text.append("大防御词条数:"+"{:.3f}".format(self.original_BigDEF_value / 6.19 * self.Rate_BigDEF_value))
+        if self.originalArtifact_box_btn15.isChecked():
+            self.originalEntryData_text.append("充能词条数:"+"{:.3f}".format(self.original_Charge_value / 5.51 * self.Rate_Charge_value))
+        if self.originalArtifact_box_btn21.isChecked():
+            self.originalEntryData_text.append("暴击伤害词条数:"+"{:.3f}".format(self.original_CritDMG_value / 6.60 * self.Rate_CritDMG_value))
+        if self.originalArtifact_box_btn22.isChecked():
+            self.originalEntryData_text.append("小生命词条数:"+"{:.3f}".format(self.original_SmallHP_value / 253.94 * self.Rate_SmallHP_value))
+        if self.originalArtifact_box_btn23.isChecked():
+            self.originalEntryData_text.append("小攻击词条数:"+"{:.3f}".format(self.original_SmallATK_value / 16.54 * self.Rate_SmallATK_value))
+        if self.originalArtifact_box_btn24.isChecked():
+            self.originalEntryData_text.append("小防御词条数:"+"{:.3f}".format(self.original_SmallDEF_value / 19.68 * self.Rate_SmallDEF_value))
+        if self.originalArtifact_box_btn25.isChecked():
+            self.originalEntryData_text.append("精通词条数:"+"{:.3f}".format(self.original_EM_value / 19.81 * self.Rate_EM_value))
+
+        self.current_entryData = self.current_SmallHP_value / 253.94 + self.current_BigHP_value / 4.95 + \
+                                 self.current_SmallATK_value / 16.54 + self.current_BigATK_value / 4.95 + \
+                                 self.current_SmallDEF_value / 19.68 + self.current_BigDEF_value / 6.19 + \
+                                 self.current_Charge_value / 5.51 + self.current_EM_value / 19.81 + \
+                                 self.current_CritRate_value / 3.30 + self.current_CritDMG_value / 6.60
+        self.currentEntryData_text.setText("词条数为：" + "{:.4f}".format(self.current_entryData))
+        if self.currentArtifact_box_btn11.isChecked():
+            self.currentEntryData_text.append("暴击词条数:" + "{:.3f}".format(self.current_CritRate_value / 3.30))
+        if self.currentArtifact_box_btn12.isChecked():
+            self.currentEntryData_text.append("大生命词条数:" + "{:.3f}".format(self.current_BigHP_value / 4.95))
+        if self.currentArtifact_box_btn13.isChecked():
+            self.currentEntryData_text.append("大攻击词条数:" + "{:.3f}".format(self.current_BigATK_value / 4.95))
+        if self.currentArtifact_box_btn14.isChecked():
+            self.currentEntryData_text.append("大防御词条数:" + "{:.3f}".format(self.current_BigDEF_value / 6.19))
+        if self.currentArtifact_box_btn15.isChecked():
+            self.currentEntryData_text.append("充能词条数:" + "{:.3f}".format(self.current_Charge_value / 5.51))
+        if self.currentArtifact_box_btn21.isChecked():
+            self.currentEntryData_text.append("暴击伤害词条数:" + "{:.3f}".format(self.current_CritDMG_value / 6.60))
+        if self.currentArtifact_box_btn22.isChecked():
+            self.currentEntryData_text.append("小生命词条数:" + "{:.3f}".format(self.current_SmallHP_value / 253.94))
+        if self.currentArtifact_box_btn23.isChecked():
+            self.currentEntryData_text.append("小攻击词条数:" + "{:.3f}".format(self.current_SmallATK_value / 16.54))
+        if self.currentArtifact_box_btn24.isChecked():
+            self.currentEntryData_text.append("小防御词条数:" + "{:.3f}".format(self.current_SmallDEF_value / 19.68))
+        if self.currentArtifact_box_btn25.isChecked():
+            self.currentEntryData_text.append("精通词条数:" + "{:.3f}".format(self.current_EM_value / 19.81))
+
+        self.Rate_current_entryData = self.current_SmallHP_value / 253.94 * self.Rate_SmallHP_value + \
+                                      self.current_BigHP_value / 4.95 * self.Rate_BigHP_value + \
+                                      self.current_SmallATK_value / 16.54 * self.Rate_SmallATK_value + \
+                                      self.current_BigATK_value / 4.95 * self.Rate_BigATK_value + \
+                                      self.current_SmallDEF_value / 19.68 * self.Rate_SmallDEF_value + \
+                                      self.current_BigDEF_value / 6.19 * self.Rate_BigDEF_value + \
+                                      self.current_Charge_value / 5.51 * self.Rate_Charge_value + \
+                                      self.current_EM_value / 19.81 * self.Rate_EM_value + \
+                                      self.current_CritRate_value / 3.30 * self.Rate_CritRate_value + \
+                                      self.current_CritDMG_value / 6.60 * self.Rate_CritDMG_value
+        self.currentEntryData_text.append("\n加权后的词条数为："+"{:.4f}".format(self.Rate_current_entryData))
+        if self.currentArtifact_box_btn11.isChecked():
+            self.currentEntryData_text.append("暴击词条数:"+"{:.3f}".format(self.current_CritRate_value / 3.30 * self.Rate_CritRate_value))
+        if self.currentArtifact_box_btn12.isChecked():
+            self.currentEntryData_text.append("大生命词条数:"+"{:.3f}".format(self.current_BigHP_value / 4.95 * self.Rate_BigHP_value))
+        if self.currentArtifact_box_btn13.isChecked():
+            self.currentEntryData_text.append("大攻击词条数:"+"{:.3f}".format(self.current_BigATK_value / 4.95 * self.Rate_BigATK_value))
+        if self.currentArtifact_box_btn14.isChecked():
+            self.currentEntryData_text.append("大防御词条数:"+"{:.3f}".format(self.current_BigDEF_value / 6.19 * self.Rate_BigDEF_value))
+        if self.currentArtifact_box_btn15.isChecked():
+            self.currentEntryData_text.append("充能词条数:"+"{:.3f}".format(self.current_Charge_value / 5.51 * self.Rate_Charge_value))
+        if self.currentArtifact_box_btn21.isChecked():
+            self.currentEntryData_text.append("暴击伤害词条数:"+"{:.3f}".format(self.current_CritDMG_value / 6.60 * self.Rate_CritDMG_value))
+        if self.currentArtifact_box_btn22.isChecked():
+            self.currentEntryData_text.append("小生命词条数:"+"{:.3f}".format(self.current_SmallHP_value / 253.94 * self.Rate_SmallHP_value))
+        if self.currentArtifact_box_btn23.isChecked():
+            self.currentEntryData_text.append("小攻击词条数:"+"{:.3f}".format(self.current_SmallATK_value / 16.54 * self.Rate_SmallATK_value))
+        if self.currentArtifact_box_btn24.isChecked():
+            self.currentEntryData_text.append("小防御词条数:"+"{:.3f}".format(self.current_SmallDEF_value / 19.68 * self.Rate_SmallDEF_value))
+        if self.currentArtifact_box_btn25.isChecked():
+            self.currentEntryData_text.append("精通词条数:"+"{:.3f}".format(self.current_EM_value / 19.81 * self.Rate_EM_value))
+
+    def cal_grindProbability(self):
+        """
+        [子函数]
+          todo 函数功能：计算赌赢的概率\n
+          关联函数：cal_data_button
+        """
+        self.grindArtifact_text.setText("你干嘛")
+
+    def CurrentLevel1_button_click(self):
+        """
+        todo 当点击原圣遗物等级选项后，记录其等级
+        """
+        self.CurrentLevel1_value = 20
+
+    def CurrentLevel2_button_click(self):
+        """
+        todo 当点击新圣遗物等级选项后，记录其等级
+        """
+        self.CurrentLevel2_value = 0
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -741,9 +1379,11 @@ class MainWindow(QWidget):
         # 创建单独的Widget
         win1 = Window1()
         win2 = Window2()
+        win3 = Window3()
         # 将创建的2个Widget添加到抽屉布局器中
         self.stacked_layout.addWidget(win1)
         self.stacked_layout.addWidget(win2)
+        self.stacked_layout.addWidget(win3)
 
     def init_ui(self):
         """ 初始界面 """
@@ -760,13 +1400,17 @@ class MainWindow(QWidget):
         btn_layout = QVBoxLayout()
         btn_press1 = QPushButton("主页面")
         btn_press2 = QPushButton("功能2")
+        btn_press3 = QPushButton("功能3")
         btn_press1.setFixedSize(55, 30)
         btn_press2.setFixedSize(55, 30)
+        btn_press3.setFixedSize(55, 30)
         # 给按钮添加事件（即点击后要调用的函数）
         btn_press1.clicked.connect(self.btn_press1_clicked)  # 为什么函数不加括号，因为绑定的是函数本身，而不是返回值。
         btn_press2.clicked.connect(self.btn_press2_clicked)
+        btn_press3.clicked.connect(self.btn_press3_clicked)
         btn_layout.addWidget(btn_press1)
         btn_layout.addWidget(btn_press2)
+        btn_layout.addWidget(btn_press3)
         btn_layout.addStretch(1)
         btn_widget.setLayout(btn_layout)
 
@@ -785,6 +1429,10 @@ class MainWindow(QWidget):
     def btn_press2_clicked(self):
         """ 切换界面2 """
         self.stacked_layout.setCurrentIndex(1)
+
+    def btn_press3_clicked(self):
+        """ 切换界面3 """
+        self.stacked_layout.setCurrentIndex(2)
 
 
 if __name__ == "__main__":
