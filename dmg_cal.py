@@ -59,5 +59,5 @@ def damagecal_detailedly(atk=1304.1, talent=2.8325, em=500.6, catalyze_verify=1,
 
 
 def damagecal_informally():
-
+    """本来想写的，现在感觉没什么必要"""
     pass

@@ -120,7 +120,7 @@ def Cat_cal(em: float, damage_catalyze_increased: float, catalyze_type: int):
     :param em: 精通
     :param damage_catalyze_increased: 激化反应加成值(圣遗物套装)
     :param catalyze_type: 激化类型(0:Quicken原激化 1:Aggravate超激化 2:Spread蔓激化)
-    TIP: todo 暂时只写90级蔓激化的参考公式
+    TIP: todo 暂时只写90级激化的参考公式
     """
     type_coefficient = 1
     if catalyze_type == 1:
