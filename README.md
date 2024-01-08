@@ -3,6 +3,8 @@
 <br/>
 <p>还不太会用github，将就着看看吧😔</p>
 <br/>
+<h3>使用方法：</h3>
+Genshin-Calculator/使用方法.pdf
 <h3>各个版本的更新说明请参考：</h3>
 Genshin-Calculator/原神伤害计算器.exe 的各个版本/introduction to version.md
 <br/><br/>
