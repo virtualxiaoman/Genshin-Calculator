@@ -9,6 +9,8 @@ Genshin-Calculator/原神伤害计算器.exe 的各个版本/下载链接.md
 Genshin-Calculator/使用方法.pdf
 <h3>各个版本的更新说明请参考：</h3>
 Genshin-Calculator/原神伤害计算器.exe 的各个版本/introduction to version.md
+<h3>mian.py：</h3>
+是纳西妲的攻略喵
 <br/><br/>
 <h3>游戏逻辑参考资料：</h3>
 没有全部罗列出来，到时候慢慢补~<br />
