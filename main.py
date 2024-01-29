@@ -106,7 +106,7 @@ class Nahida_em_Q1:
         self.Nahida_atk_forQ1 += Nahida_atkIncrease_forQ1 + 310.8  # 武器和羽毛
         self.Nahida_em_ForQ1 = 115.2 + Nahida_emIncrease_ForQ1 + 186.5  # 带精通沙
         self.Nahida_CRIT_ForQ1_init = 3.07 + Nahida_CRITIncrease_forQ1
-        self.Nahida_DB_ForQ1_init = 0.466 + Nahida_DBIncrease_forQ1
+        self.Nahida_DB_ForQ1_init = 2.1178 + Nahida_DBIncrease_forQ1
         self.draw_em_Q1(ax)
 
     def draw_em_Q1(self, ax):
@@ -430,7 +430,7 @@ damage_NoArtifact = dc.AE_cal(atk=Nahida_ATK_Q3, em=1000) * dc.CD_cal(cr=Nahida_
                     dc.DB_cal(artifact_increase=Nahida_DB1_Q3)
 damage_Deepwood_Memories = dc.AE_cal(atk=Nahida_ATK_Q3, em=1000) * dc.CD_cal(cr=Nahida_CR_Q3, cd=Nahida_CD_Q3) * \
                            dc.DB_cal(artifact_increase=Nahida_DB1_Q3+0.15)
-damage_Gilded_Dreams = dc.AE_cal(atk=Nahida_ATK_Q3 + 0.28*Nahida_ATKW_Q3, em=1000+130) * \
+damage_Gilded_Dreams = dc.AE_cal(atk=Nahida_ATK_Q3 + 0.14*Nahida_ATKW_Q3, em=1000+180) * \
                        dc.CD_cal(cr=Nahida_CR_Q3, cd=Nahida_CD_Q3) * dc.DB_cal(artifact_increase=Nahida_DB1_Q3)
 damage_Golden_Troupe = dc.AE_cal(atk=Nahida_ATK_Q3, em=1000) * dc.CD_cal(cr=Nahida_CR_Q3, cd=Nahida_CD_Q3) * \
                        dc.DB_cal(artifact_increase=Nahida_DB1_Q3+0.45)
@@ -438,9 +438,9 @@ damage_2and2_Golden = dc.AE_cal(atk=Nahida_ATK_Q3, em=1000+80) * dc.CD_cal(cr=Na
                        dc.DB_cal(artifact_increase=Nahida_DB1_Q3+0.2)
 damage_2and2_Deepwood = dc.AE_cal(atk=Nahida_ATK_Q3, em=1000+80) * dc.CD_cal(cr=Nahida_CR_Q3, cd=Nahida_CD_Q3) * \
                        dc.DB_cal(artifact_increase=Nahida_DB1_Q3+0.15)
-# 67808.57314868286 71355.293970324 74766.98635538477 78448.73561360624 73904.87024352727 72700.34468378533
+# 67808.57314868286 71355.293970324 73026.63323113185 78448.73561360624 73904.87024352727 72700.34468378533
 print(damage_NoArtifact, damage_Deepwood_Memories, damage_Gilded_Dreams, damage_Golden_Troupe, damage_2and2_Golden, damage_2and2_Deepwood)
-# 1.0 1.052304902712881 1.102618487362126 1.1569147081386428 1.0899045181422289 1.0721409005963944
+# 1.0 1.052304902712881 1.076952807589793 1.1569147081386428 1.0899045181422289 1.0721409005963944
 print(damage_NoArtifact/damage_NoArtifact, damage_Deepwood_Memories/damage_NoArtifact,
       damage_Gilded_Dreams/damage_NoArtifact, damage_Golden_Troupe/damage_NoArtifact,
       damage_2and2_Golden/damage_NoArtifact, damage_2and2_Deepwood/damage_NoArtifact)
@@ -450,7 +450,7 @@ damage_NoArtifact = dc.AE_cal(atk=Nahida_ATK_Q3, em=1000) * dc.CD_cal(cr=Nahida_
                     dc.DB_cal(artifact_increase=Nahida_DB5_Q3)
 damage_Deepwood_Memories = dc.AE_cal(atk=Nahida_ATK_Q3, em=1000) * dc.CD_cal(cr=Nahida_CR_Q3, cd=Nahida_CD_Q3) * \
                            dc.DB_cal(artifact_increase=Nahida_DB5_Q3+0.15)
-damage_Gilded_Dreams = dc.AE_cal(atk=Nahida_ATK_Q3 + 0.28*Nahida_ATKW_Q3, em=1000+130) * \
+damage_Gilded_Dreams = dc.AE_cal(atk=Nahida_ATK_Q3 + 0.14*Nahida_ATKW_Q3, em=1000+180) * \
                        dc.CD_cal(cr=Nahida_CR_Q3, cd=Nahida_CD_Q3) * dc.DB_cal(artifact_increase=Nahida_DB5_Q3)
 damage_Golden_Troupe = dc.AE_cal(atk=Nahida_ATK_Q3, em=1000) * dc.CD_cal(cr=Nahida_CR_Q3, cd=Nahida_CD_Q3) * \
                        dc.DB_cal(artifact_increase=Nahida_DB5_Q3+0.45)
@@ -458,18 +458,19 @@ damage_2and2_Golden = dc.AE_cal(atk=Nahida_ATK_Q3, em=1000+80) * dc.CD_cal(cr=Na
                        dc.DB_cal(artifact_increase=Nahida_DB5_Q3+0.2)
 damage_2and2_Deepwood = dc.AE_cal(atk=Nahida_ATK_Q3, em=1000+80) * dc.CD_cal(cr=Nahida_CR_Q3, cd=Nahida_CD_Q3) * \
                        dc.DB_cal(artifact_increase=Nahida_DB5_Q3+0.15)
-# 75374.91090151727 78921.6317231584 83109.77024328601 86015.07336644067 81613.83382587579 80409.30826613383
+# 75374.91090151727 78921.6317231584 81175.22191721952 86015.07336644067 81613.83382587579 80409.30826613383
 print(damage_NoArtifact, damage_Deepwood_Memories, damage_Gilded_Dreams, damage_Golden_Troupe, damage_2and2_Golden, damage_2and2_Deepwood)
-# 1.0 1.0470543948804818 1.102618487362126 1.1411631846414456 1.082771877933098 1.066791420439546
+# 1.0 1.0470543948804818 1.076952807589793 1.1411631846414456 1.082771877933098 1.066791420439546
 print(damage_NoArtifact/damage_NoArtifact, damage_Deepwood_Memories/damage_NoArtifact,
       damage_Gilded_Dreams/damage_NoArtifact, damage_Golden_Troupe/damage_NoArtifact,
       damage_2and2_Golden/damage_NoArtifact, damage_2and2_Deepwood/damage_NoArtifact)
 
 # 精五千夜，赌狗赌到增伤，带剧团4和饰金的区别
-damage_Gilded_Dreams = dc.AE_cal(atk=Nahida_ATK_Q3 + 0.28*Nahida_ATKW_Q3, em=1000+130) * \
+damage_Gilded_Dreams = dc.AE_cal(atk=Nahida_ATK_Q3 + 0.14*Nahida_ATKW_Q3, em=1000+180) * \
                        dc.CD_cal(cr=Nahida_CR_Q3, cd=Nahida_CD_Q3+0.551) * dc.DB_cal(artifact_increase=Nahida_DB5_Q3+0.96)
 damage_Golden_Troupe = dc.AE_cal(atk=Nahida_ATK_Q3, em=1000) * dc.CD_cal(cr=Nahida_CR_Q3, cd=Nahida_CD_Q3+0.551) * \
                        dc.DB_cal(artifact_increase=Nahida_DB5_Q3+0.96+0.45)
+# 125676.79999144586 129357.23082033003 1.029284886543377
 print(damage_Gilded_Dreams, damage_Golden_Troupe, damage_Golden_Troupe / damage_Gilded_Dreams)
 
 
@@ -523,6 +524,14 @@ draw_expr(expr2, r'$\frac{\partial DMG}{\partial a}$', "伤害偏导[0,42]")
 damage_42expectation1 = dc.AE_cal(atk=1151.77*2+1048.7*4, talent=1, em=1048.7) * dc.DB_cal(artifact_increase=2.3178) * \
                        dc.CD_cal(cr=1, cd=2.474) * dc.DF_cal(hilichurl_level=100,reduce_defenses=0.3) * \
                        dc.RT_cal(reduce_resistance=0)
+print("________________")
+print(dc.AE_cal(atk=1151.77*2+1048.7*4, talent=1, em=1048.7))
+print(dc.AE_cal(atk=1151.77*2.193+1048.7*4.386, talent=1, em=1048.7))
+print(dc.DB_cal(artifact_increase=2.3178))
+print(dc.CD_cal(cr=1, cd=2.474))
+print(dc.DF_cal(hilichurl_level=100,reduce_defenses=0.3))
+print(dc.RT_cal(reduce_resistance=0))
+print(dc.RT_cal(reduce_resistance=0.3))
 damage_42expectation2 = dc.AE_cal(atk=1151.77*2+1048.7*4, talent=1, em=1048.7) * dc.DB_cal(artifact_increase=2.3178) * \
                        dc.CD_cal(cr=1, cd=2.474) * dc.DF_cal(hilichurl_level=100,reduce_defenses=0.3) * \
                        dc.RT_cal(reduce_resistance=0.3)
@@ -612,8 +621,242 @@ def draw_42_Q4(atk_Q4=1151.77, em_Q4=1048.7, DB_Q4=2.3178, cr_Q4=1, cd_Q4=2.474)
     plt.legend()
     os.makedirs('output/纳西妲攻略图片/Q4/', exist_ok=True)
     plt.savefig(f'output/纳西妲攻略图片/Q4/满命42词条业障除激化提升曲线.png')
+    plt.close()
 
 draw_42_Q4()
 
 
+"""5.基于4的辅助角色与武器的选择"""
+# 生命值：15138.6
+# 攻击力：298.97 + 542 +310.8=1151.77
+# 精通：115.2(突破) + 265+32(精一千夜一层) + 186.5(精通沙) + 250(天赋1) + 四命100=948.7(四命按1命敌人算)
+# 防御力：667.3
+# 充能：100%
+# 双暴：100%-247.4%(28词条双暴)
+# 伤害加成：草伤杯46.6+天赋2吃满80+剧团45E增伤+千夜2层20+40.18(开Q火角色1层) = 231.78%
+# 防御：纳西妲减防30%，默认人物等级90，怪物等级100
+# 抗性：默认10%草抗
+atk_Q5 = 1151.77
+atk_ADD = symbols('atk_ADD')
+em_Q5 = 948.7
+em_ADD = symbols('em_ADD')
+cr_Q5 = 1
+cd_Q5 = 2.012
+cd_ADD = symbols('cd_ADD')
+DB_Q5 = 2.3178
+db_ADD = symbols('db_ADD')
+damage_Q5_base = dc.AE_cal(atk=atk_Q5 * 2 + em_Q5 * 4, talent=1, em=em_Q5) * dc.DB_cal(artifact_increase=DB_Q5) * \
+                 dc.CD_cal(cr=cr_Q5, cd=cd_Q5) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                 dc.RT_cal(reduce_resistance=0)
 
+# 攻击
+damage_Q5_ATK_ADD = 1.5 * damage_Q5_base
+damage_Q5_atk = dc.AE_cal(atk=(atk_Q5 + atk_ADD) * 2 + em_Q5 * 4, talent=1, em=em_Q5) * dc.DB_cal(artifact_increase=DB_Q5) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_atk, damage_Q5_ATK_ADD)
+solution_atk = solve(eq, atk_ADD)
+print("ATK_50%:", solution_atk)
+damage_Q5_ATK_ADD = 1.3 * damage_Q5_base
+damage_Q5_atk = dc.AE_cal(atk=(atk_Q5 + atk_ADD) * 2 + em_Q5 * 4, talent=1, em=em_Q5) * dc.DB_cal(artifact_increase=DB_Q5) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_atk, damage_Q5_ATK_ADD)
+solution_atk = solve(eq, atk_ADD)
+print("ATK_30%:", solution_atk)
+damage_Q5_ATK_ADD = 1.2 * damage_Q5_base
+damage_Q5_atk = dc.AE_cal(atk=(atk_Q5 + atk_ADD) * 2 + em_Q5 * 4, talent=1, em=em_Q5) * dc.DB_cal(artifact_increase=DB_Q5) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_atk, damage_Q5_ATK_ADD)
+solution_atk = solve(eq, atk_ADD)
+print("ATK_20%:", solution_atk)
+damage_Q5_ATK_ADD = 1.1 * damage_Q5_base
+damage_Q5_atk = dc.AE_cal(atk=(atk_Q5 + atk_ADD) * 2 + em_Q5 * 4, talent=1, em=em_Q5) * dc.DB_cal(artifact_increase=DB_Q5) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_atk, damage_Q5_ATK_ADD)
+solution_atk = solve(eq, atk_ADD)
+print("ATK_10%:", solution_atk)
+
+# 精通
+damage_Q5_EM_ADD = 1.5 * damage_Q5_base
+damage_Q5_em = dc.AE_cal(atk=atk_Q5 * 2 + (em_Q5+em_ADD) * 4, talent=1, em=(em_Q5+em_ADD)) * dc.DB_cal(artifact_increase=DB_Q5) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_em, damage_Q5_EM_ADD)
+solution_em = solve(eq, em_ADD)
+print("EM_50%:", solution_em)
+damage_Q5_EM_ADD = 1.3 * damage_Q5_base
+damage_Q5_em = dc.AE_cal(atk=atk_Q5 * 2 + (em_Q5+em_ADD) * 4, talent=1, em=(em_Q5+em_ADD)) * dc.DB_cal(artifact_increase=DB_Q5) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_em, damage_Q5_EM_ADD)
+solution_em = solve(eq, em_ADD)
+print("EM_30%:", solution_em)
+damage_Q5_EM_ADD = 1.2 * damage_Q5_base
+damage_Q5_em = dc.AE_cal(atk=atk_Q5 * 2 + (em_Q5+em_ADD) * 4, talent=1, em=(em_Q5+em_ADD)) * dc.DB_cal(artifact_increase=DB_Q5) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_em, damage_Q5_EM_ADD)
+solution_em = solve(eq, em_ADD)
+print("EM_20%:", solution_em)
+damage_Q5_EM_ADD = 1.1 * damage_Q5_base
+damage_Q5_em = dc.AE_cal(atk=atk_Q5 * 2 + (em_Q5+em_ADD) * 4, talent=1, em=(em_Q5+em_ADD)) * dc.DB_cal(artifact_increase=DB_Q5) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_em, damage_Q5_EM_ADD)
+solution_em = solve(eq, em_ADD)
+print("EM_10%:", solution_em)
+# 双暴
+damage_Q5_CD_ADD = 1.5 * damage_Q5_base
+damage_Q5_cd = dc.AE_cal(atk=atk_Q5 * 2 + em_Q5 * 4, talent=1, em=em_Q5) * dc.DB_cal(artifact_increase=DB_Q5) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5+cd_ADD) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_cd, damage_Q5_CD_ADD)
+solution_cd = solve(eq, cd_ADD)
+print("CD_50%:", solution_cd)
+damage_Q5_CD_ADD = 1.3 * damage_Q5_base
+damage_Q5_cd = dc.AE_cal(atk=atk_Q5 * 2 + em_Q5 * 4, talent=1, em=em_Q5) * dc.DB_cal(artifact_increase=DB_Q5) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5+cd_ADD) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_cd, damage_Q5_CD_ADD)
+solution_cd = solve(eq, cd_ADD)
+print("CD_30%:", solution_cd)
+damage_Q5_CD_ADD = 1.2 * damage_Q5_base
+damage_Q5_cd = dc.AE_cal(atk=atk_Q5 * 2 + em_Q5 * 4, talent=1, em=em_Q5) * dc.DB_cal(artifact_increase=DB_Q5) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5+cd_ADD) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_cd, damage_Q5_CD_ADD)
+solution_cd = solve(eq, cd_ADD)
+print("CD_20%:", solution_cd)
+damage_Q5_CD_ADD = 1.1 * damage_Q5_base
+damage_Q5_cd = dc.AE_cal(atk=atk_Q5 * 2 + em_Q5 * 4, talent=1, em=em_Q5) * dc.DB_cal(artifact_increase=DB_Q5) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5+cd_ADD) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_cd, damage_Q5_CD_ADD)
+solution_cd = solve(eq, cd_ADD)
+print("CD_10%:", solution_cd)
+# 草伤
+damage_Q5_DB_ADD = 1.5 * damage_Q5_base
+damage_Q5_db = dc.AE_cal(atk=atk_Q5 * 2 + em_Q5 * 4, talent=1, em=em_Q5) * dc.DB_cal(artifact_increase=DB_Q5+db_ADD) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_db, damage_Q5_DB_ADD)
+solution_db = solve(eq, db_ADD)
+print("DB_50%:", solution_db)
+damage_Q5_DB_ADD = 1.3 * damage_Q5_base
+damage_Q5_db = dc.AE_cal(atk=atk_Q5 * 2 + em_Q5 * 4, talent=1, em=em_Q5) * dc.DB_cal(artifact_increase=DB_Q5+db_ADD) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_db, damage_Q5_DB_ADD)
+solution_db = solve(eq, db_ADD)
+print("DB_30%:", solution_db)
+damage_Q5_DB_ADD = 1.2 * damage_Q5_base
+damage_Q5_db = dc.AE_cal(atk=atk_Q5 * 2 + em_Q5 * 4, talent=1, em=em_Q5) * dc.DB_cal(artifact_increase=DB_Q5+db_ADD) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_db, damage_Q5_DB_ADD)
+solution_db = solve(eq, db_ADD)
+print("DB_20%:", solution_db)
+damage_Q5_DB_ADD = 1.1 * damage_Q5_base
+damage_Q5_db = dc.AE_cal(atk=atk_Q5 * 2 + em_Q5 * 4, talent=1, em=em_Q5) * dc.DB_cal(artifact_increase=DB_Q5+db_ADD) * \
+                dc.CD_cal(cr=cr_Q5, cd=cd_Q5) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+                dc.RT_cal(reduce_resistance=0)
+eq = Eq(damage_Q5_db, damage_Q5_DB_ADD)
+solution_db = solve(eq, db_ADD)
+print("DB_10%:", solution_db)
+
+# damage_Q5_base = dc.AE_cal(atk=atk_Q5 * 2 + em_Q5 * 4, talent=1, em=em_Q5) * dc.DB_cal(artifact_increase=DB_Q5) * \
+#                  dc.CD_cal(cr=cr_Q5, cd=cd_Q5) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+#                  dc.RT_cal(reduce_resistance=0)
+# print(damage_Q5_base)
+# em_Q5 += 193.3
+# damage_Q5_test = dc.AE_cal(atk=atk_Q5 * 2 + em_Q5 * 4, talent=1, em=em_Q5) * dc.DB_cal(artifact_increase=DB_Q5) * \
+#                  dc.CD_cal(cr=cr_Q5, cd=cd_Q5) * dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3) * \
+#                  dc.RT_cal(reduce_resistance=0)
+# print(damage_Q5_test)
+
+# 减防
+x = symbols('x')
+df_1 = dc.DF_cal(hilichurl_level=100, reduce_defenses=0.3)
+df_2 = dc.DF_cal(hilichurl_level=100, reduce_defenses=(0.3+x))
+df_deta = (df_2-df_1)/df_1
+df_deta = simplify(df_deta)
+print(df_deta)
+
+# 减抗
+rt_0 = dc.RT_cal(reduce_resistance=0)
+rt_20 = dc.RT_cal(reduce_resistance=0.2)
+rt_30 = dc.RT_cal(reduce_resistance=0.3)
+rt_50 = dc.RT_cal(reduce_resistance=0.5)
+print(rt_0)
+print((rt_20-rt_0)/rt_0, (rt_30-rt_0)/rt_0, (rt_50-rt_0)/rt_0)
+rt_0 = dc.RT_cal(reduce_resistance=0, resistance=0.5)
+rt_20 = dc.RT_cal(reduce_resistance=0.2, resistance=0.5)
+rt_30 = dc.RT_cal(reduce_resistance=0.3, resistance=0.5)
+rt_50 = dc.RT_cal(reduce_resistance=0.5, resistance=0.5)
+print(rt_0)
+print((rt_20-rt_0)/rt_0, (rt_30-rt_0)/rt_0, (rt_50-rt_0)/rt_0)
+rt_0 = dc.RT_cal(reduce_resistance=0, resistance=0.7)
+rt_20 = dc.RT_cal(reduce_resistance=0.2, resistance=0.7)
+rt_30 = dc.RT_cal(reduce_resistance=0.3, resistance=0.7)
+rt_50 = dc.RT_cal(reduce_resistance=0.5, resistance=0.7)
+print(rt_0)
+print((rt_20-rt_0)/rt_0, (rt_30-rt_0)/rt_0, (rt_50-rt_0)/rt_0)
+rt_0 = dc.RT_cal(reduce_resistance=0, resistance=1)
+rt_20 = dc.RT_cal(reduce_resistance=0.2, resistance=1)
+rt_30 = dc.RT_cal(reduce_resistance=0.3, resistance=1)
+rt_50 = dc.RT_cal(reduce_resistance=0.5, resistance=1)
+print(rt_0)
+print((rt_20-rt_0)/rt_0, (rt_30-rt_0)/rt_0, (rt_50-rt_0)/rt_0)
+rt_0 = dc.RT_cal(reduce_resistance=0, resistance=2.1)
+rt_20 = dc.RT_cal(reduce_resistance=0.2, resistance=2.1)
+rt_30 = dc.RT_cal(reduce_resistance=0.3, resistance=2.1)
+rt_50 = dc.RT_cal(reduce_resistance=0.5, resistance=2.1)
+print(rt_0)
+print((rt_20-rt_0)/rt_0, (rt_30-rt_0)/rt_0, (rt_50-rt_0)/rt_0)
+
+# 白术
+# 基于白术生命值上限不超过50000点的部分，每1000点将使超激化、蔓激化反应带来的伤害提升提高0.8%，持续6秒。也就是最多40%。
+base_0 = dc.AE_cal(atk=atk_Q5 * 2 + em_Q5 * 4, talent=1, em=em_Q5)
+base_1 = dc.AE_cal(atk=atk_Q5 * 2 + em_Q5 * 4, talent=1, em=em_Q5, damage_catalyze_increased=0.4)
+print(base_0, base_1, (base_1-base_0)/base_0)
+
+# 完结撒花个鬼
+
+# 充能计算
+# 通用产球
+def hit_or_miss(ROW_num=1027000, total_seconds=20):
+    initial_prob = 0.1
+    current_prob = 0.1
+    hit_count = [[0] for _ in range(ROW_num)]
+    # print(hit_count)
+    for Row in range(ROW_num):
+        for t in range(total_seconds):
+            # t从0开始, hit_count[]的有效数据从1开始
+            if np.random.rand() < current_prob:
+                hit_count[Row].append(hit_count[Row][t] + 1)
+                current_prob = initial_prob
+            else:
+                hit_count[Row].append(hit_count[Row][t])
+                current_prob += 0.1
+        # print(f"t={t}时，产球{hit_count[t]}次，下次概率{current_prob}")
+        # print(hit_count)  # 第N次时的命中次数是hit_count[N]
+    hit_count = np.array(hit_count)
+    # print(hit_count)
+    column_sums = np.sum(hit_count, axis=0)/ROW_num
+    print(column_sums)
+    x_values = np.arange(len(column_sums))
+    fig = plt.figure()
+    plt.plot(x_values, column_sums, marker='o', linestyle='-')
+    plt.xticks(np.arange(0, max(x_values) + 0.5, 2))
+    plt.yticks(np.arange(0, max(column_sums) + 0.5, 0.5))
+    plt.title('角色通用的 普攻、重击或蓄力射击 的能量恢复', fontproperties=fontsimsun12)
+    plt.xlabel('普攻、重击或蓄力射击的次数', fontproperties=fontsimsun12)
+    plt.ylabel('当前期望产球次数', fontproperties=fontsimsun12)
+    plt.grid(True)
+    os.makedirs('output/纳西妲攻略图片/Q_Add/', exist_ok=True)
+    plt.savefig(f'output/纳西妲攻略图片/Q_Add/通用能量恢复可视化图.png')
+
+hit_or_miss()
